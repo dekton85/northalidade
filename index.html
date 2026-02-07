@@ -229,15 +229,8 @@
           var t = (new URLSearchParams(window.location.search)).get('ticker') || 'ASTS';
           var tl = t.toLowerCase();
           document.getElementById('finviz-row').innerHTML = ''
-            + '<div class="card"><div class="card-header"><span class="card-title">Finviz Snapshot</span></div><div style="text-align:center;"><img src="https://finviz.com/chart.ashx?t='+t+'&ty=c&ta=1&p=d&s=l" alt="'+t+' Daily Chart" style="width:100%;border-radius:8px;"></div><div style="margin-top:0.75rem;text-align:center;"><img src="https://finviz.com/chart.ashx?t='+t+'&ty=c&ta=1&p=w&s=l" alt="'+t+' Weekly Chart" style="width:100%;border-radius:8px;"></div></div>'
-            + '<div class="card"><div class="card-header"><span class="card-title">Short Interest & Ownership</span></div><div class="finviz-links">'
-            + '<a href="https://finviz.com/quote.ashx?t='+t+'&p=d" target="_blank" class="fv-link">📊 Full Finviz Snapshot</a>'
-            + '<a href="https://www.nasdaq.com/market-activity/stocks/'+tl+'/short-interest" target="_blank" class="fv-link">📉 Nasdaq Short Interest</a>'
-            + '<a href="https://fintel.io/so/us/'+tl+'" target="_blank" class="fv-link">🏛 Institutional Ownership (Fintel)</a>'
-            + '<a href="https://www.nasdaq.com/market-activity/stocks/'+tl+'/institutional-holdings" target="_blank" class="fv-link">🏦 Nasdaq Institutional Holdings</a>'
-            + '<a href="https://whalewisdom.com/stock/'+tl+'" target="_blank" class="fv-link">🐋 WhaleWisdom 13F Filings</a>'
-            + '<a href="https://shortinterest.com/stock/'+tl+'" target="_blank" class="fv-link">⚡ ShortInterest.com</a>'
-            + '</div></div>';
+            + '<div class="card"><div class="card-header"><span class="card-title">Finviz Snapshot</span></div><div style="text-align:center;"><img src="https://finviz.com/chart.ashx?t='+t+'&ty=c&ta=1&p=d&s=l" alt="'+t+' Daily Chart" style="width:100%;border-radius:8px;"></div></div>'
+            + '<div class="card"><div class="card-header"><span class="card-title">Institutional Ownership</span><a href="https://fintel.io/so/us/'+tl+'" target="_blank" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-family:var(--font-mono);">Open in Fintel ↗</a></div><iframe src="https://fintel.io/so/us/'+tl+'" style="width:100%;height:500px;border:none;border-radius:8px;background:#0d1117;" sandbox="allow-scripts allow-same-origin"></iframe></div>';
         })();
       </script>
     </div>
