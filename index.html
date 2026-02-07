@@ -7,7 +7,7 @@
   <meta name="description" content="North Alidade Market Intelligence — macro research, company analysis, and portfolio tracking.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Serif+4:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -16,8 +16,8 @@
       --bg-card: #161B22;
       --bg-card-hover: #1C222B;
       --bg-elevated: #1E2530;
-      --border: rgba(255, 255, 255, 0.06);
-      --border-focus: rgba(255, 255, 255, 0.12);
+      --border: rgba(255,255,255,0.06);
+      --border-focus: rgba(255,255,255,0.12);
       --text-primary: #E6EDF3;
       --text-secondary: #8B949E;
       --text-muted: #484F58;
@@ -29,6 +29,7 @@
       --font-ui: 'DM Sans', sans-serif;
       --font-mono: 'IBM Plex Mono', monospace;
       --font-display: 'Playfair Display', serif;
+      --font-serif: 'Source Serif 4', 'Playfair Display', Georgia, serif;
       --radius: 8px;
       --radius-lg: 12px;
     }
@@ -38,8 +39,8 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
 
-    /* ──── TOPBAR ──── */
-    .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 56px; background: rgba(11, 14, 17, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
+    /* TOPBAR */
+    .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 56px; background: rgba(11,14,17,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
     .topbar-left { display: flex; align-items: center; gap: 2rem; }
     .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
     .brand-compass { width: 28px; height: 28px; border: 2px solid var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; color: var(--cyan); }
@@ -52,21 +53,19 @@
     .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0.75rem; right: 0.75rem; height: 2px; background: var(--cyan); border-radius: 2px 2px 0 0; }
     .mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 1.1rem; }
 
-    /* ──── TICKER TAPE ──── */
+    /* TICKER TAPE */
     .ticker-tape { position: fixed; top: 56px; left: 0; right: 0; z-index: 99; height: 46px; border-bottom: 1px solid var(--border); }
 
-    /* ──── MAIN ──── */
+    /* MAIN */
     main { padding-top: 102px; min-height: 100vh; }
     .page { display: none; padding: 1.5rem; max-width: 1500px; margin: 0 auto; }
     .page.active { display: block; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-    /* ──── HEADERS ──── */
     .page-header { margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
     .page-header h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 500; margin-bottom: 0.25rem; }
     .page-header p { font-size: 0.88rem; color: var(--text-secondary); }
 
-    /* ──── CARDS ──── */
     .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; transition: border-color 0.3s; overflow: hidden; }
     .card:hover { border-color: var(--border-focus); }
     .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
@@ -74,19 +73,14 @@
     .card-flush { padding: 0; }
     .card-flush .card-header { padding: 1.25rem 1.25rem 0; }
 
-    /* ──── GRIDS ──── */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
     .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
-    .grid-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; margin-bottom: 1.5rem; }
     .full-width { margin-bottom: 1.5rem; }
 
-    /* ──── WIDGET CONTAINERS ──── */
     .widget-container { width: 100%; overflow: hidden; border-radius: var(--radius); }
-    .widget-container iframe { border: none; }
     .fred-embed { width: 100%; border: none; border-radius: var(--radius); }
 
-    /* ──── SEARCH ──── */
     .search-bar { display: flex; gap: 0; margin-bottom: 1.5rem; }
     .search-input { flex: 1; font-family: var(--font-mono); font-size: 0.9rem; padding: 0.85rem 1.25rem; background: var(--bg-card); border: 1px solid var(--border); border-right: none; border-radius: var(--radius) 0 0 var(--radius); color: var(--text-primary); outline: none; transition: border-color 0.3s; }
     .search-input::placeholder { color: var(--text-muted); }
@@ -94,25 +88,61 @@
     .search-btn { font-family: var(--font-ui); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--cyan); color: var(--bg-primary); border: 1px solid var(--cyan); border-radius: 0 var(--radius) var(--radius) 0; padding: 0 1.75rem; cursor: pointer; transition: all 0.25s; }
     .search-btn:hover { background: #6DE0E8; }
 
-    /* ──── FOOTER ──── */
+    .info-banner { background: rgba(86,212,221,0.08); border: 1px solid rgba(86,212,221,0.2); border-radius: var(--radius); padding: 0.75rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.82rem; color: var(--cyan); }
+
     .dash-footer { margin-top: 3rem; padding: 1.5rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted); }
     .dash-footer a { color: var(--cyan); text-decoration: none; }
 
-    /* ──── INFO BANNERS ──── */
-    .info-banner { background: rgba(86, 212, 221, 0.08); border: 1px solid rgba(86, 212, 221, 0.2); border-radius: var(--radius); padding: 0.75rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.82rem; color: var(--cyan); }
+    /* ═══════ LINE OF SIGHT STYLES ═══════ */
+    .los-index { max-width: 900px; margin: 0 auto; }
+    .los-article-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem 2.5rem; margin-bottom: 1.5rem; cursor: pointer; transition: all 0.3s; }
+    .los-article-card:hover { border-color: var(--border-focus); background: var(--bg-card-hover); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+    .los-card-tag { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.75rem; }
+    .los-card-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 600; line-height: 1.25; margin-bottom: 0.6rem; color: var(--text-primary); }
+    .los-card-deck { font-family: var(--font-serif); font-size: 1.02rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem; font-style: italic; }
+    .los-card-meta { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); }
+    .los-card-meta span { color: var(--text-secondary); }
 
-    /* ──── RESPONSIVE ──── */
+    /* Article view */
+    .los-article { max-width: 780px; margin: 0 auto; display: none; }
+    .los-article.active { display: block; }
+    .los-back { font-family: var(--font-ui); font-size: 0.8rem; font-weight: 500; color: var(--cyan); background: none; border: none; cursor: pointer; margin-bottom: 2rem; padding: 0; display: flex; align-items: center; gap: 0.4rem; }
+    .los-back:hover { text-decoration: underline; }
+
+    .los-masthead { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.25em; text-transform: uppercase; color: var(--cyan); margin-bottom: 0.35rem; }
+    .los-date-top { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2rem; }
+    .los-category { font-family: var(--font-mono); font-size: 0.68rem; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--amber); margin-bottom: 0.75rem; display: inline-block; padding-bottom: 0.35rem; border-bottom: 2px solid var(--amber); }
+    .los-headline { font-family: var(--font-display); font-size: clamp(2.2rem, 5vw, 3.2rem); font-weight: 600; line-height: 1.15; margin-bottom: 1.25rem; color: var(--text-primary); }
+    .los-deck { font-family: var(--font-serif); font-size: 1.15rem; font-style: italic; color: var(--text-secondary); line-height: 1.65; margin-bottom: 1.5rem; border-left: 3px solid var(--cyan); padding-left: 1.25rem; }
+    .los-sources-line { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.5rem; line-height: 1.6; }
+    .los-pub-date { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+
+    .los-body p { font-family: var(--font-serif); font-size: 1.08rem; color: #D0D7DE; line-height: 1.85; margin-bottom: 1.5rem; }
+    .los-body h2 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; color: var(--text-primary); margin: 2.5rem 0 1rem; }
+
+    .los-pullquote { margin: 2.5rem 0; padding: 1.75rem 2rem; background: rgba(86,212,221,0.04); border-left: 3px solid var(--cyan); border-radius: 0 var(--radius) var(--radius) 0; }
+    .los-pullquote p { font-family: var(--font-serif); font-size: 1.12rem; font-style: italic; color: var(--text-primary); line-height: 1.7; margin-bottom: 0.5rem !important; }
+    .los-pullquote cite { font-family: var(--font-mono); font-size: 0.78rem; color: var(--cyan); font-style: normal; }
+
+    .los-endmark { text-align: center; font-size: 1.5rem; color: var(--cyan); margin: 2rem 0; }
+
+    .los-footer-sources { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); line-height: 1.7; padding-top: 1.5rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+
+    /* RESPONSIVE */
     @media (max-width: 1024px) {
       .grid-3 { grid-template-columns: 1fr; }
       .grid-2 { grid-template-columns: 1fr; }
-      .grid-2-1, .grid-1-2 { grid-template-columns: 1fr; }
+      .grid-2-1 { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
       .tab-nav { display: none; }
-      .tab-nav.open { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: rgba(11, 14, 17, 0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0.5rem; z-index: 101; }
+      .tab-nav.open { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: rgba(11,14,17,0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0.5rem; z-index: 101; }
       .tab-btn { height: 44px; text-align: left; padding: 0 1rem; }
       .mobile-menu-btn { display: block; }
       .page { padding: 1rem; }
+      .los-article-card { padding: 1.5rem; }
+      .los-card-title { font-size: 1.4rem; }
+      .los-pullquote { padding: 1.25rem 1.25rem; }
     }
   </style>
 </head>
@@ -121,7 +151,7 @@
   <!-- TOPBAR -->
   <div class="topbar">
     <div class="topbar-left">
-      <a href="#" class="brand">
+      <a href="#" class="brand" onclick="switchTab('macro');return false;">
         <div class="brand-compass">▲</div>
         <span class="brand-text">NORTH <span>ALIDADE</span></span>
       </a>
@@ -130,6 +160,7 @@
         <button class="tab-btn" onclick="switchTab('news')">News & Geopolitics</button>
         <button class="tab-btn" onclick="switchTab('company')">Company Analysis</button>
         <button class="tab-btn" onclick="switchTab('watchlist')">Watchlist</button>
+        <button class="tab-btn" onclick="switchTab('los')">Line of Sight</button>
       </nav>
     </div>
     <div class="topbar-right">
@@ -142,489 +173,198 @@
     <div class="tradingview-widget-container">
       <div class="tradingview-widget-container__widget"></div>
       <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
-      {
-        "symbols": [
-          {"proName": "FOREXCOM:SPXUSD", "title": "S&P 500"},
-          {"proName": "FOREXCOM:NSXUSD", "title": "US 100"},
-          {"proName": "FX_IDC:EURUSD", "title": "EUR/USD"},
-          {"proName": "BITSTAMP:BTCUSD", "title": "Bitcoin"},
-          {"proName": "TVC:GOLD", "title": "Gold"},
-          {"proName": "TVC:DXY", "title": "US Dollar"},
-          {"proName": "TVC:US10Y", "title": "10Y Treasury"},
-          {"proName": "NYMEX:CL1!", "title": "Crude Oil"},
-          {"proName": "TVC:VIX", "title": "VIX"}
-        ],
-        "showSymbolLogo": true,
-        "isTransparent": true,
-        "displayMode": "adaptive",
-        "colorTheme": "dark",
-        "locale": "en"
-      }
+      {"symbols":[{"proName":"FOREXCOM:SPXUSD","title":"S&P 500"},{"proName":"FOREXCOM:NSXUSD","title":"US 100"},{"proName":"FX_IDC:EURUSD","title":"EUR/USD"},{"proName":"BITSTAMP:BTCUSD","title":"Bitcoin"},{"proName":"TVC:GOLD","title":"Gold"},{"proName":"TVC:DXY","title":"US Dollar"},{"proName":"TVC:US10Y","title":"10Y Treasury"},{"proName":"NYMEX:CL1!","title":"Crude Oil"},{"proName":"TVC:VIX","title":"VIX"}],"showSymbolLogo":true,"isTransparent":true,"displayMode":"adaptive","colorTheme":"dark","locale":"en"}
       </script>
     </div>
   </div>
 
   <main>
-
-    <!-- ═══════════════ MACRO PAGE ═══════════════ -->
+    <!-- ═══════ MACRO ═══════ -->
     <div class="page active" id="page-macro">
-      <div class="page-header">
-        <h1>Macro Environment</h1>
-        <p>Federal Reserve policy, inflation, labor markets & economic indicators — live data via FRED & TradingView</p>
-      </div>
-
-      <div class="info-banner">
-        <span>📡</span>
-        <span>All data is live — powered by FRED and TradingView embeds. No API keys required.</span>
-      </div>
-
-      <!-- Market Overview Widget -->
-      <div class="full-width">
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Market Overview</span></div>
-          <div class="widget-container" style="height: 460px;">
-            <div class="tradingview-widget-container" style="height:100%;width:100%">
-              <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
-              {
-                "colorTheme": "dark",
-                "dateRange": "12M",
-                "showChart": true,
-                "locale": "en",
-                "width": "100%",
-                "height": "100%",
-                "largeChartUrl": "",
-                "isTransparent": true,
-                "showSymbolLogo": true,
-                "showFloatingTooltip": true,
-                "tabs": [
-                  {
-                    "title": "Indices",
-                    "symbols": [
-                      {"s": "FOREXCOM:SPXUSD", "d": "S&P 500"},
-                      {"s": "FOREXCOM:NSXUSD", "d": "Nasdaq 100"},
-                      {"s": "FOREXCOM:DJI", "d": "Dow 30"},
-                      {"s": "INDEX:NKY", "d": "Nikkei 225"},
-                      {"s": "INDEX:DEU40", "d": "DAX"}
-                    ]
-                  },
-                  {
-                    "title": "Bonds",
-                    "symbols": [
-                      {"s": "TVC:US02Y", "d": "2Y Treasury"},
-                      {"s": "TVC:US05Y", "d": "5Y Treasury"},
-                      {"s": "TVC:US10Y", "d": "10Y Treasury"},
-                      {"s": "TVC:US30Y", "d": "30Y Treasury"},
-                      {"s": "TVC:US10Y-TVC:US02Y", "d": "10Y-2Y Spread"}
-                    ]
-                  },
-                  {
-                    "title": "Commodities",
-                    "symbols": [
-                      {"s": "TVC:GOLD", "d": "Gold"},
-                      {"s": "TVC:SILVER", "d": "Silver"},
-                      {"s": "NYMEX:CL1!", "d": "Crude Oil"},
-                      {"s": "NYMEX:NG1!", "d": "Natural Gas"},
-                      {"s": "COMEX:HG1!", "d": "Copper"}
-                    ]
-                  },
-                  {
-                    "title": "Forex",
-                    "symbols": [
-                      {"s": "TVC:DXY", "d": "US Dollar Index"},
-                      {"s": "FX_IDC:EURUSD", "d": "EUR/USD"},
-                      {"s": "FX_IDC:USDJPY", "d": "USD/JPY"},
-                      {"s": "FX_IDC:GBPUSD", "d": "GBP/USD"},
-                      {"s": "FX_IDC:USDCNY", "d": "USD/CNY"}
-                    ]
-                  }
-                ]
-              }
-              </script>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- FRED Charts -->
+      <div class="page-header"><h1>Macro Environment</h1><p>Federal Reserve policy, inflation, labor markets & economic indicators — live data via FRED & TradingView</p></div>
+      <div class="info-banner"><span>📡</span><span>All data is live — powered by FRED and TradingView embeds. No API keys required.</span></div>
+      <div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Market Overview</span></div><div class="widget-container" style="height:460px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>{"colorTheme":"dark","dateRange":"12M","showChart":true,"locale":"en","width":"100%","height":"100%","isTransparent":true,"showSymbolLogo":true,"showFloatingTooltip":true,"tabs":[{"title":"Indices","symbols":[{"s":"FOREXCOM:SPXUSD","d":"S&P 500"},{"s":"FOREXCOM:NSXUSD","d":"Nasdaq 100"},{"s":"FOREXCOM:DJI","d":"Dow 30"},{"s":"INDEX:NKY","d":"Nikkei 225"},{"s":"INDEX:DEU40","d":"DAX"}]},{"title":"Bonds","symbols":[{"s":"TVC:US02Y","d":"2Y Treasury"},{"s":"TVC:US05Y","d":"5Y Treasury"},{"s":"TVC:US10Y","d":"10Y Treasury"},{"s":"TVC:US30Y","d":"30Y Treasury"}]},{"title":"Commodities","symbols":[{"s":"TVC:GOLD","d":"Gold"},{"s":"TVC:SILVER","d":"Silver"},{"s":"NYMEX:CL1!","d":"Crude Oil"},{"s":"NYMEX:NG1!","d":"Natural Gas"},{"s":"COMEX:HG1!","d":"Copper"}]},{"title":"Forex","symbols":[{"s":"TVC:DXY","d":"US Dollar Index"},{"s":"FX_IDC:EURUSD","d":"EUR/USD"},{"s":"FX_IDC:USDJPY","d":"USD/JPY"},{"s":"FX_IDC:GBPUSD","d":"GBP/USD"}]}]}</script></div></div></div></div>
       <div class="grid-2">
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Federal Funds Rate</span></div>
-          <div class="widget-container">
-            <iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=1CPBV&width=600&height=300" scrolling="no" frameborder="0" style="overflow:hidden; width:100%; height:320px;" class="fred-embed" loading="lazy"></iframe>
-          </div>
-        </div>
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">CPI — Year over Year</span></div>
-          <div class="widget-container">
-            <iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=1CPCl&width=600&height=300" scrolling="no" frameborder="0" style="overflow:hidden; width:100%; height:320px;" class="fred-embed" loading="lazy"></iframe>
-          </div>
-        </div>
+        <div class="card card-flush"><div class="card-header"><span class="card-title">Federal Funds Rate</span></div><div class="widget-container"><iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=1CPBV&width=600&height=300" scrolling="no" frameborder="0" style="overflow:hidden;width:100%;height:320px;" loading="lazy"></iframe></div></div>
+        <div class="card card-flush"><div class="card-header"><span class="card-title">CPI — Year over Year</span></div><div class="widget-container"><iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=1CPCl&width=600&height=300" scrolling="no" frameborder="0" style="overflow:hidden;width:100%;height:320px;" loading="lazy"></iframe></div></div>
       </div>
-
       <div class="grid-2">
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Real GDP Growth</span></div>
-          <div class="widget-container">
-            <iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=1CPDa&width=600&height=300" scrolling="no" frameborder="0" style="overflow:hidden; width:100%; height:320px;" class="fred-embed" loading="lazy"></iframe>
-          </div>
-        </div>
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Unemployment Rate</span></div>
-          <div class="widget-container">
-            <iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=1CPDn&width=600&height=300" scrolling="no" frameborder="0" style="overflow:hidden; width:100%; height:320px;" class="fred-embed" loading="lazy"></iframe>
-          </div>
-        </div>
+        <div class="card card-flush"><div class="card-header"><span class="card-title">Real GDP Growth</span></div><div class="widget-container"><iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=1CPDa&width=600&height=300" scrolling="no" frameborder="0" style="overflow:hidden;width:100%;height:320px;" loading="lazy"></iframe></div></div>
+        <div class="card card-flush"><div class="card-header"><span class="card-title">Unemployment Rate</span></div><div class="widget-container"><iframe src="https://fred.stlouisfed.org/graph/graph-landing.php?g=1CPDn&width=600&height=300" scrolling="no" frameborder="0" style="overflow:hidden;width:100%;height:320px;" loading="lazy"></iframe></div></div>
       </div>
-
-      <!-- Yield Curve via TradingView -->
-      <div class="full-width">
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Treasury Yield Curve & Rates</span></div>
-          <div class="widget-container" style="height: 450px;">
-            <div class="tradingview-widget-container" style="height:100%;width:100%">
-              <div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
-              {
-                "symbols": [
-                  ["US 10Y","TVC:US10Y|12M"],
-                  ["US 2Y","TVC:US02Y|12M"],
-                  ["US 30Y","TVC:US30Y|12M"],
-                  ["US 5Y","TVC:US05Y|12M"],
-                  ["Fed Funds","FRED:FEDFUNDS|12M"]
-                ],
-                "chartOnly": false,
-                "width": "100%",
-                "height": "100%",
-                "locale": "en",
-                "colorTheme": "dark",
-                "autosize": true,
-                "showVolume": false,
-                "showMA": false,
-                "hideDateRanges": false,
-                "hideMarketStatus": false,
-                "hideSymbolLogo": false,
-                "scalePosition": "right",
-                "scaleMode": "Normal",
-                "fontFamily": "DM Sans, sans-serif",
-                "fontSize": "10",
-                "noTimeScale": false,
-                "valuesTracking": "1",
-                "changeMode": "price-and-percent",
-                "chartType": "area",
-                "lineWidth": 2,
-                "lineType": 0,
-                "dateRanges": ["1m|1D","3m|1D","12m|1D","60m|1W","all|1M"],
-                "isTransparent": true
-              }
-              </script>
-            </div>
-          </div>
-        </div>
-      </div>
+      <div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Treasury Yield Curve & Rates</span></div><div class="widget-container" style="height:450px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:calc(100% - 32px);width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>{"symbols":[["US 10Y","TVC:US10Y|12M"],["US 2Y","TVC:US02Y|12M"],["US 30Y","TVC:US30Y|12M"],["US 5Y","TVC:US05Y|12M"],["Fed Funds","FRED:FEDFUNDS|12M"]],"chartOnly":false,"width":"100%","height":"100%","locale":"en","colorTheme":"dark","autosize":true,"showVolume":false,"showMA":false,"hideDateRanges":false,"hideMarketStatus":false,"hideSymbolLogo":false,"scalePosition":"right","scaleMode":"Normal","noTimeScale":false,"valuesTracking":"1","changeMode":"price-and-percent","chartType":"area","lineWidth":2,"dateRanges":["1m|1D","3m|1D","12m|1D","60m|1W","all|1M"],"isTransparent":true}</script></div></div></div></div>
     </div>
 
-    <!-- ═══════════════ NEWS PAGE ═══════════════ -->
+    <!-- ═══════ NEWS ═══════ -->
     <div class="page" id="page-news">
-      <div class="page-header">
-        <h1>News & Geopolitics</h1>
-        <p>Market-moving headlines, earnings, and geopolitical developments</p>
-      </div>
-
+      <div class="page-header"><h1>News & Geopolitics</h1><p>Market-moving headlines, earnings, and geopolitical developments</p></div>
       <div class="grid-2-1">
-        <!-- Timeline -->
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Live Market News</span></div>
-          <div class="widget-container" style="height: 700px;">
-            <div class="tradingview-widget-container" style="height:100%;width:100%">
-              <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
-              {
-                "feedMode": "all_symbols",
-                "isTransparent": true,
-                "displayMode": "regular",
-                "width": "100%",
-                "height": "100%",
-                "colorTheme": "dark",
-                "locale": "en"
-              }
-              </script>
-            </div>
-          </div>
-        </div>
-
+        <div class="card card-flush"><div class="card-header"><span class="card-title">Live Market News</span></div><div class="widget-container" style="height:700px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>{"feedMode":"all_symbols","isTransparent":true,"displayMode":"regular","width":"100%","height":"100%","colorTheme":"dark","locale":"en"}</script></div></div></div>
         <div>
-          <!-- Economic Calendar -->
-          <div class="card card-flush" style="margin-bottom: 1rem;">
-            <div class="card-header"><span class="card-title">Economic Calendar</span></div>
-            <div class="widget-container" style="height: 400px;">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
-                {
-                  "colorTheme": "dark",
-                  "isTransparent": true,
-                  "width": "100%",
-                  "height": "100%",
-                  "locale": "en",
-                  "importanceFilter": "-1,0,1",
-                  "countryFilter": "us"
-                }
-                </script>
-              </div>
-            </div>
-          </div>
-
-          <!-- Heatmap mini -->
-          <div class="card card-flush">
-            <div class="card-header"><span class="card-title">S&P 500 Heatmap</span></div>
-            <div class="widget-container" style="height: 280px;">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
-                {
-                  "exchanges": [],
-                  "dataSource": "SPX500",
-                  "grouping": "sector",
-                  "blockSize": "market_cap_basic",
-                  "blockColor": "change",
-                  "locale": "en",
-                  "symbolUrl": "",
-                  "colorTheme": "dark",
-                  "hasTopBar": false,
-                  "isDataSetEnabled": false,
-                  "isZoomEnabled": false,
-                  "hasSymbolTooltip": true,
-                  "isTransparent": true,
-                  "width": "100%",
-                  "height": "100%"
-                }
-                </script>
-              </div>
-            </div>
-          </div>
+          <div class="card card-flush" style="margin-bottom:1rem;"><div class="card-header"><span class="card-title">Economic Calendar</span></div><div class="widget-container" style="height:400px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>{"colorTheme":"dark","isTransparent":true,"width":"100%","height":"100%","locale":"en","importanceFilter":"-1,0,1","countryFilter":"us"}</script></div></div></div>
+          <div class="card card-flush"><div class="card-header"><span class="card-title">S&P 500 Heatmap</span></div><div class="widget-container" style="height:280px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>{"exchanges":[],"dataSource":"SPX500","grouping":"sector","blockSize":"market_cap_basic","blockColor":"change","locale":"en","colorTheme":"dark","hasTopBar":false,"isDataSetEnabled":false,"isZoomEnabled":false,"hasSymbolTooltip":true,"isTransparent":true,"width":"100%","height":"100%"}</script></div></div></div>
         </div>
       </div>
     </div>
 
-    <!-- ═══════════════ COMPANY PAGE ═══════════════ -->
+    <!-- ═══════ COMPANY ═══════ -->
     <div class="page" id="page-company">
-      <div class="page-header">
-        <h1>Company Analysis</h1>
-        <p>Search any ticker for real-time charts, financials, and technical analysis</p>
-      </div>
-
-      <div class="search-bar">
-        <input type="text" class="search-input" placeholder="Enter ticker symbol (e.g. ASTS, AAPL, TSLA)..." id="tickerSearch" value="ASTS" onkeyup="if(event.key==='Enter') loadCompanyWidgets()">
-        <button class="search-btn" onclick="loadCompanyWidgets()">Analyze</button>
-      </div>
-
+      <div class="page-header"><h1>Company Analysis</h1><p>Search any ticker for real-time charts, financials, and technical analysis</p></div>
+      <div class="search-bar"><input type="text" class="search-input" placeholder="Enter ticker symbol (e.g. ASTS, AAPL, TSLA)..." id="tickerSearch" value="ASTS" onkeyup="if(event.key==='Enter') loadCompanyWidgets()"><button class="search-btn" onclick="loadCompanyWidgets()">Analyze</button></div>
       <div id="companyWidgets">
-        <!-- Company Profile -->
-        <div class="full-width">
-          <div class="card card-flush">
-            <div class="widget-container" style="height: 200px;">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js" async>
-                {
-                  "width": "100%",
-                  "height": "100%",
-                  "isTransparent": true,
-                  "colorTheme": "dark",
-                  "symbol": "NASDAQ:ASTS",
-                  "locale": "en"
-                }
-                </script>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Advanced Chart -->
-        <div class="full-width">
-          <div class="card card-flush">
-            <div class="card-header"><span class="card-title">Advanced Chart</span></div>
-            <div class="widget-container" id="advancedChartContainer" style="height: 550px;">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div id="tradingview_advanced" style="height:calc(100% - 32px);width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-                <script type="text/javascript">
-                  new TradingView.widget({
-                    "autosize": true,
-                    "symbol": "NASDAQ:ASTS",
-                    "interval": "D",
-                    "timezone": "America/New_York",
-                    "theme": "dark",
-                    "style": "1",
-                    "locale": "en",
-                    "enable_publishing": false,
-                    "allow_symbol_change": true,
-                    "studies": ["RSI@tv-basicstudies","MASimple@tv-basicstudies","MACD@tv-basicstudies"],
-                    "container_id": "tradingview_advanced",
-                    "hide_side_toolbar": false,
-                    "withdateranges": true,
-                    "details": true,
-                    "hotlist": true,
-                    "calendar": true,
-                    "backgroundColor": "rgba(22, 27, 34, 1)",
-                    "gridColor": "rgba(255, 255, 255, 0.04)"
-                  });
-                </script>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Financials + Technical -->
+        <div class="full-width"><div class="card card-flush"><div class="widget-container" style="height:200px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js" async>{"width":"100%","height":"100%","isTransparent":true,"colorTheme":"dark","symbol":"NASDAQ:ASTS","locale":"en"}</script></div></div></div></div>
+        <div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Advanced Chart</span></div><div class="widget-container" id="advancedChartContainer" style="height:550px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tradingview_advanced" style="height:calc(100% - 32px);width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script><script type="text/javascript">new TradingView.widget({"autosize":true,"symbol":"NASDAQ:ASTS","interval":"D","timezone":"America/New_York","theme":"dark","style":"1","locale":"en","enable_publishing":false,"allow_symbol_change":true,"studies":["RSI@tv-basicstudies","MASimple@tv-basicstudies","MACD@tv-basicstudies"],"container_id":"tradingview_advanced","hide_side_toolbar":false,"withdateranges":true,"details":true,"hotlist":true,"calendar":true,"backgroundColor":"rgba(22,27,34,1)","gridColor":"rgba(255,255,255,0.04)"});</script></div></div></div></div>
         <div class="grid-2">
-          <div class="card card-flush">
-            <div class="card-header"><span class="card-title">Financials</span></div>
-            <div class="widget-container" style="height: 450px;">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-financials.js" async>
-                {
-                  "isTransparent": true,
-                  "largeChartUrl": "",
-                  "displayCurrency": "USD",
-                  "width": "100%",
-                  "height": "100%",
-                  "colorTheme": "dark",
-                  "symbol": "NASDAQ:ASTS",
-                  "locale": "en"
-                }
-                </script>
-              </div>
-            </div>
-          </div>
-          <div class="card card-flush">
-            <div class="card-header"><span class="card-title">Technical Analysis</span></div>
-            <div class="widget-container" style="height: 450px;">
-              <div class="tradingview-widget-container" style="height:100%;width:100%">
-                <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-                <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
-                {
-                  "interval": "1D",
-                  "width": "100%",
-                  "height": "100%",
-                  "isTransparent": true,
-                  "symbol": "NASDAQ:ASTS",
-                  "showIntervalTabs": true,
-                  "displayMode": "multiple",
-                  "colorTheme": "dark",
-                  "locale": "en"
-                }
-                </script>
-              </div>
-            </div>
-          </div>
+          <div class="card card-flush"><div class="card-header"><span class="card-title">Financials</span></div><div class="widget-container" style="height:450px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-financials.js" async>{"isTransparent":true,"displayCurrency":"USD","width":"100%","height":"100%","colorTheme":"dark","symbol":"NASDAQ:ASTS","locale":"en"}</script></div></div></div>
+          <div class="card card-flush"><div class="card-header"><span class="card-title">Technical Analysis</span></div><div class="widget-container" style="height:450px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>{"interval":"1D","width":"100%","height":"100%","isTransparent":true,"symbol":"NASDAQ:ASTS","showIntervalTabs":true,"displayMode":"multiple","colorTheme":"dark","locale":"en"}</script></div></div></div>
         </div>
       </div>
     </div>
 
-    <!-- ═══════════════ WATCHLIST PAGE ═══════════════ -->
+    <!-- ═══════ WATCHLIST ═══════ -->
     <div class="page" id="page-watchlist">
-      <div class="page-header">
-        <h1>Watchlist</h1>
-        <p>Track your tickers with real-time quotes, mini-charts, and performance data</p>
-      </div>
-
+      <div class="page-header"><h1>Watchlist</h1><p>Track your tickers with real-time quotes, mini-charts, and performance data</p></div>
       <div class="grid-2">
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Your Watchlist</span></div>
-          <div class="widget-container" style="height: 600px;">
-            <div class="tradingview-widget-container" style="height:100%;width:100%">
-              <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>
-              {
-                "width": "100%",
-                "height": "100%",
-                "symbolsGroups": [
-                  {
-                    "name": "Core Holdings",
-                    "symbols": [
-                      {"name": "NASDAQ:ASTS", "displayName": "AST SpaceMobile"},
-                      {"name": "NASDAQ:AAPL", "displayName": "Apple"},
-                      {"name": "NASDAQ:NVDA", "displayName": "NVIDIA"},
-                      {"name": "NASDAQ:MSFT", "displayName": "Microsoft"},
-                      {"name": "NASDAQ:AMZN", "displayName": "Amazon"},
-                      {"name": "NASDAQ:TSLA", "displayName": "Tesla"},
-                      {"name": "NASDAQ:META", "displayName": "Meta"},
-                      {"name": "NYSE:PLTR", "displayName": "Palantir"}
-                    ]
-                  },
-                  {
-                    "name": "Indices & Macro",
-                    "symbols": [
-                      {"name": "FOREXCOM:SPXUSD", "displayName": "S&P 500"},
-                      {"name": "FOREXCOM:NSXUSD", "displayName": "Nasdaq 100"},
-                      {"name": "TVC:DXY", "displayName": "Dollar Index"},
-                      {"name": "TVC:US10Y", "displayName": "10Y Treasury"},
-                      {"name": "TVC:VIX", "displayName": "VIX"},
-                      {"name": "TVC:GOLD", "displayName": "Gold"},
-                      {"name": "NYMEX:CL1!", "displayName": "Crude Oil"},
-                      {"name": "BITSTAMP:BTCUSD", "displayName": "Bitcoin"}
-                    ]
-                  }
-                ],
-                "showSymbolLogo": true,
-                "isTransparent": true,
-                "colorTheme": "dark",
-                "locale": "en"
-              }
-              </script>
-            </div>
-          </div>
+        <div class="card card-flush"><div class="card-header"><span class="card-title">Your Watchlist</span></div><div class="widget-container" style="height:600px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-quotes.js" async>{"width":"100%","height":"100%","symbolsGroups":[{"name":"Core Holdings","symbols":[{"name":"NASDAQ:ASTS","displayName":"AST SpaceMobile"},{"name":"NASDAQ:AAPL","displayName":"Apple"},{"name":"NASDAQ:NVDA","displayName":"NVIDIA"},{"name":"NASDAQ:MSFT","displayName":"Microsoft"},{"name":"NASDAQ:AMZN","displayName":"Amazon"},{"name":"NASDAQ:TSLA","displayName":"Tesla"},{"name":"NASDAQ:META","displayName":"Meta"},{"name":"NYSE:PLTR","displayName":"Palantir"}]},{"name":"Indices & Macro","symbols":[{"name":"FOREXCOM:SPXUSD","displayName":"S&P 500"},{"name":"FOREXCOM:NSXUSD","displayName":"Nasdaq 100"},{"name":"TVC:DXY","displayName":"Dollar Index"},{"name":"TVC:US10Y","displayName":"10Y Treasury"},{"name":"TVC:VIX","displayName":"VIX"},{"name":"TVC:GOLD","displayName":"Gold"},{"name":"NYMEX:CL1!","displayName":"Crude Oil"},{"name":"BITSTAMP:BTCUSD","displayName":"Bitcoin"}]}],"showSymbolLogo":true,"isTransparent":true,"colorTheme":"dark","locale":"en"}</script></div></div></div>
+        <div class="card card-flush"><div class="card-header"><span class="card-title">Market Movers</span></div><div class="widget-container" style="height:600px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>{"colorTheme":"dark","dateRange":"12M","exchange":"US","showChart":true,"locale":"en","isTransparent":true,"showSymbolLogo":true,"showFloatingTooltip":false,"width":"100%","height":"100%"}</script></div></div></div>
+      </div>
+      <div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Stock Screener</span></div><div class="widget-container" style="height:500px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div><script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-screener.js" async>{"width":"100%","height":"100%","defaultColumn":"overview","defaultScreen":"most_capitalized","market":"america","showToolbar":true,"colorTheme":"dark","locale":"en","isTransparent":true}</script></div></div></div></div>
+    </div>
+
+    <!-- ═══════ LINE OF SIGHT ═══════ -->
+    <div class="page" id="page-los">
+      <!-- INDEX VIEW -->
+      <div id="los-index-view">
+        <div class="page-header">
+          <h1>Line of Sight</h1>
+          <p>Original research, analysis, and long-form reporting from North Alidade</p>
         </div>
 
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Market Movers</span></div>
-          <div class="widget-container" style="height: 600px;">
-            <div class="tradingview-widget-container" style="height:100%;width:100%">
-              <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-hotlists.js" async>
-              {
-                "colorTheme": "dark",
-                "dateRange": "12M",
-                "exchange": "US",
-                "showChart": true,
-                "locale": "en",
-                "largeChartUrl": "",
-                "isTransparent": true,
-                "showSymbolLogo": true,
-                "showFloatingTooltip": false,
-                "width": "100%",
-                "height": "100%"
-              }
-              </script>
-            </div>
+        <div class="los-index">
+          <div class="los-article-card" onclick="openArticle('gold-rush')">
+            <div class="los-card-tag">Global Finance</div>
+            <div class="los-card-title">The New Gold Rush</div>
+            <div class="los-card-deck">As trade wars rage and the dollar wobbles, central banks are stockpiling gold and silver at rates not seen since the 1950s—signaling a fundamental shift in the architecture of global finance.</div>
+            <div class="los-card-meta"><span>NorthAlidade: LineOfSight</span> · February 6, 2026 · 18 min read</div>
+          </div>
+
+          <!-- Placeholder cards for future articles -->
+          <div class="los-article-card" style="opacity:0.4; cursor:default;" onclick="">
+            <div class="los-card-tag">Coming Soon</div>
+            <div class="los-card-title">Next Article</div>
+            <div class="los-card-deck">More original research and analysis coming soon. Check back for new dispatches.</div>
+            <div class="los-card-meta"><span>NorthAlidade: LineOfSight</span></div>
           </div>
         </div>
       </div>
 
-      <!-- Screener -->
-      <div class="full-width">
-        <div class="card card-flush">
-          <div class="card-header"><span class="card-title">Stock Screener</span></div>
-          <div class="widget-container" style="height: 500px;">
-            <div class="tradingview-widget-container" style="height:100%;width:100%">
-              <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
-              <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-screener.js" async>
-              {
-                "width": "100%",
-                "height": "100%",
-                "defaultColumn": "overview",
-                "defaultScreen": "most_capitalized",
-                "market": "america",
-                "showToolbar": true,
-                "colorTheme": "dark",
-                "locale": "en",
-                "isTransparent": true
-              }
-              </script>
-            </div>
+      <!-- ARTICLE VIEW: Gold Rush -->
+      <div class="los-article" id="article-gold-rush">
+        <button class="los-back" onclick="closeArticle()">← Back to Line of Sight</button>
+
+        <div class="los-masthead">NorthAlidade: LineOfSight</div>
+        <div class="los-date-top">February 6, 2026</div>
+
+        <div class="los-category">Global Finance</div>
+        <h1 class="los-headline">The New Gold Rush</h1>
+        <div class="los-deck">As trade wars rage and the dollar wobbles, central banks are stockpiling gold and silver at rates not seen since the 1950s. China, Russia, and even the United States are racing to secure precious metals—signaling a fundamental shift in the architecture of global finance.</div>
+        <div class="los-sources-line">Compiled from reporting by the World Gold Council, Brookings Institution, J.P. Morgan, Fortune, CNBC, and the Atlantic Council</div>
+        <div class="los-pub-date">Thursday, February 6, 2026</div>
+
+        <div class="los-body">
+          <p>Something unusual is happening in the vaults of the world's central banks. For the fourth consecutive year, governments have accumulated gold at a pace not seen since the immediate aftermath of World War II. In 2025 alone, central banks added 863 tonnes to their reserves, and gold prices have responded accordingly—surging past $5,500 per ounce in early 2026, more than doubling since the start of 2025. Silver has followed an even more dramatic trajectory, briefly touching $121 per ounce in February before settling in the $80 range.</p>
+
+          <p>This is not merely a market phenomenon. It is a geopolitical one. The nations driving this accumulation—China, Russia, Poland, Turkey, India—are not buying gold because they expect prices to rise. They are buying because they no longer trust the financial architecture that has governed global trade since 1944. And the United States, sensing the shift, has begun its own quiet stockpiling, importing over 600 tonnes of physical gold from London and Switzerland in the first two months of 2025 alone—equivalent to 13 percent of the reserves at Fort Knox.</p>
+
+          <h2>The Scale of the Shift</h2>
+
+          <p>The World Gold Council's year-end data tells the story in tonnage. Poland led all buyers in 2025, adding 102 tonnes to its reserves, bringing its total holdings to 550 tonnes. The National Bank of Poland has announced plans to purchase up to 150 more tonnes, with Governor Adam Glapiński declaring that the increase would elevate Poland to "elite" status among gold-holding nations. Turkey added 27 tonnes across 23 consecutive months of purchases. The Czech Republic continued its steady accumulation toward a stated 2028 target of 100 tonnes.</p>
+
+          <p>But the most consequential buyer may be the one whose figures are least reliable. China officially reported adding just 27 tonnes in 2025, bringing its stated reserves to 2,306 tonnes. Yet researchers parsing trade data and vault records estimate that the People's Bank of China holds more than 5,000 tonnes of monetary gold—more than twice the publicly disclosed figure. Some analysts put the number even higher, at 8,000 tonnes. If accurate, this would make China the world's second-largest holder of gold after the United States, and would represent one of the largest covert accumulations of any strategic asset in modern history.</p>
+
+          <div class="los-pullquote">
+            <p>"China is playing a key role in the ongoing rise in gold prices because of central bank buying, arbitrage trading, and increased speculative and safe-haven demand among Chinese households."</p>
+            <cite>— Torsten Slok, Chief Economist, Apollo Global Management</cite>
           </div>
+
+          <p>Russia's strategy has been even more explicit. As of late 2025, gold accounted for 42.3 percent of Russia's total international reserves—the highest proportion since 1995. The value of Russian gold holdings surpassed $310 billion in December, a 57 percent increase year-over-year. Russia has also become the first major economy to formally announce plans to include silver in its strategic state reserves, allocating $535 million for precious metals purchases in its 2025-2027 federal budget.</p>
+
+          <h2>The Frozen Billions That Changed Everything</h2>
+
+          <p>To understand why central banks are hoarding gold, one must go back to February 2022. In the days following Russia's invasion of Ukraine, the United States and its allies froze approximately $300 billion in Russian central bank reserves held in Western financial institutions. The REPO Task Force—consisting of the G7, European Union, and Australia—effectively demonstrated that dollar-denominated assets in foreign banks are not truly sovereign if Washington decides otherwise.</p>
+
+          <p>The lesson was not lost on Beijing, or on dozens of other capitals around the world. Every central bank watching the seizure understood a simple truth: reserves held in Western institutions carry counterparty risk that gold stored in domestic vaults does not. A bar of gold in Moscow or Beijing cannot be frozen by sanctions, disabled by SWIFT removal, or rendered worthless by currency manipulation. It is, in the language of central bankers, a "politically neutral" asset.</p>
+
+          <div class="los-pullquote">
+            <p>"Remember when the West froze $300 billion of Russian central bank assets in 2022? That moment changed everything. Every central bank watching that seizure understood a simple truth: dollars in Western banks aren't really yours if Washington decides otherwise."</p>
+            <cite>— Analysis from Finomics Edge</cite>
+          </div>
+
+          <p>The Brookings Institution has tracked this shift in sentiment. A recent survey found that 68 percent of central banks—up from 50 percent just four years ago—now plan to hold their gold reserves domestically rather than in traditional custodial locations like the Federal Reserve Bank of New York or the Bank of England. Germany, which had stored much of its gold in New York since the Cold War, accelerated its repatriation program. Austria, Belgium, Poland, Hungary, and the Netherlands have followed suit. Even nations with historically close ties to the United States are reconsidering where they keep their most important financial assets.</p>
+
+          <h2>Tariffs, Trade Wars, and the Dollar Under Pressure</h2>
+
+          <p>The geopolitical backdrop of 2025 could hardly have been more favorable for gold. President Trump's aggressive tariff policies—including a 100 percent levy on Chinese imports announced in the fall—disrupted global trade and eroded confidence in the stability of the dollar-based system. Gold crossed $4,000 per ounce for the first time in October 2025, and analysts at Goldman Sachs raised their December 2026 forecast to $4,900.</p>
+
+          <p>The relationship between tariffs and gold is not coincidental. When the United States imposes duties on trading partners, it creates economic uncertainty that drives investors toward safe-haven assets. But more fundamentally, aggressive use of trade policy accelerates the very de-dollarization trends that make gold attractive in the first place. China's retaliatory measures, including export controls on rare earth metals and new restrictions on silver exports, have only intensified the dynamic.</p>
+
+          <p>Robin Brooks, a senior fellow at the Brookings Institution, noted a telling divergence in market behavior. Historically, stock market selloffs have sent investors to the dollar as a safe haven. But in the trade war volatility of 2025, that pattern broke. Gold, not the greenback, became the preferred refuge. "The fact that this didn't happen and that gold prices rose more than on 'Liberation Day' is concerning," Brooks wrote. "The Dollar is not looking healthy."</p>
+
+          <h2>The Silver Squeeze: A Supply Crisis Unfolds</h2>
+
+          <p>If gold's rise has been dramatic, silver's has been explosive. The white metal surged from $29 per ounce at the start of 2025 to above $121 in February 2026—a gain of more than 300 percent that briefly gave silver a total market capitalization exceeding $4 trillion. The proximate cause was China's announcement, effective January 1, 2026, of new export restrictions requiring government licenses for silver exports.</p>
+
+          <p>Under the new rules, only large, state-approved companies with annual production capacity of at least 80 tonnes and $30 million in credit lines will be permitted to export. This effectively blocks hundreds of smaller and mid-sized exporters who had served as key suppliers to global industrial users. China controls 60 to 70 percent of the world's silver supply chain, so the restrictions represent a structural shock to global availability.</p>
+
+          <div class="los-pullquote">
+            <p>"This is not good. Silver is needed in many industrial processes."</p>
+            <cite>— Elon Musk, responding to China's export restrictions on X</cite>
+          </div>
+
+          <p>The timing could hardly be worse for industries dependent on silver. Unlike gold, which is primarily a monetary and jewelry metal, silver plays a critical role in electronics, medicine, and—most crucially—renewable energy. Solar photovoltaic cells account for roughly 20 percent of global silver consumption, and the metal's unique electrical and thermal conductivity makes substitution difficult. Electric vehicles typically use 25 to 50 grams of silver per car in electrical contacts and power electronics. As demand for green technologies accelerates, silver consumption is rising just as supply is being constrained.</p>
+
+          <p>The structural deficit is stark. In 2025, global silver demand reached an estimated 1.24 billion ounces, while total supply—including mine production and recycling—amounted to only 1.01 billion ounces. This 230-million-ounce shortfall equals the entire annual output of Mexico, the world's largest silver producer. Unlike gold, most silver is mined as a byproduct of copper, zinc, and lead production, meaning even higher prices cannot quickly incentivize new supply. New mines take 8 to 12 years to develop.</p>
+
+          <p>Global inventories are draining rapidly. COMEX registered inventories in the United States have fallen 70 percent since 2020. London Bullion Market Association vaults have lost around 40 percent of their holdings. Shanghai inventories sit at ten-year lows. Physical premiums—the difference between the price of actual metal and paper futures contracts—have ballooned, with Shanghai silver trading above $80 per ounce even as COMEX futures remained in the $30-$35 range. The divergence signals desperation among buyers seeking actual delivery rather than paper exposure.</p>
+
+          <h2>Washington's Quiet Stockpiling</h2>
+
+          <p>The United States has not been idle in this new precious metals race. In the first two months of 2025, America imported over 600 tonnes of physical gold—primarily from London and Switzerland—at a pace that analysts describe as strategic stockpiling rather than routine market activity. The volume is equivalent to 13 percent of the gold officially held at Fort Knox.</p>
+
+          <p>Questions about Fort Knox have intensified in parallel. The U.S. Mint officially lists holdings of 4,581.5 tonnes (147.3 million troy ounces), worth approximately $1.44 trillion at current prices. But no comprehensive independent audit has been conducted since 1953. Congressman Thomas Massie introduced the Gold Reserve Transparency Act of 2025, calling for a full audit. Elon Musk and other prominent figures have demanded verification of the holdings. The mere introduction of such legislation signals that trust in the system is no longer implicit.</p>
+
+          <p>Some analysts speculate that the gold imports are intended to close open contracts and IOUs issued by bullion banks since the 1990s—effectively refilling reserves that may have been lent or leased out over decades. Others suggest preparation for a potential gold-backed Treasury instrument, or even a partial return to gold-backed currency. Whatever the motive, the pattern is clear: even the issuer of the world's reserve currency is hedging its bets.</p>
+
+          <h2>Building a Parallel Financial System</h2>
+
+          <p>The gold rush is inseparable from the broader de-dollarization movement. Russia and China have systematically reduced their reliance on dollar-based trade. By late 2025, 90 to 95 percent of Russia-China bilateral trade was being conducted in local currencies—rubles and yuan—rather than dollars. China's Cross-Border Interbank Payment System (CIPS) now links nearly 5,000 banks across 185 countries, providing an alternative to SWIFT.</p>
+
+          <p>The BRICS bloc—expanded in 2024 to include Egypt, Ethiopia, Indonesia, Iran, and the UAE alongside the original five members—has accelerated efforts to create infrastructure for non-dollar trade. In October 2025, researchers launched a pilot program for a gold-anchored settlement "Unit" for transactions within the bloc. A prototype followed in December. The Unit is designed as a digital trade currency backed by gold, allowing member nations to settle trade without using U.S. banks, store value using gold instead of foreign currency reserves, and reduce exposure to dollar liquidity shocks.</p>
+
+          <div class="los-pullquote">
+            <p>"The dollar era, forged in the ashes of World War II, gave the world seven decades of stability—and of subordination. The next era, born in the crucible of sanctions and resilience, promises something different: sovereignty through diversification."</p>
+            <cite>— M. A. Hossain, Asia Times</cite>
+          </div>
+
+          <p>China is also positioning itself as an alternative custodian for foreign gold reserves. According to September 2025 reports, at least one Southeast Asian country has expressed interest in storing gold reserves in Chinese vaults rather than traditional Western centers like London. The logic is straightforward: for nations that conduct most of their trade with Beijing and fear political friction with Washington, China offers storage that cannot be frozen for geopolitical reasons.</p>
+
+          <h2>The End of an Era?</h2>
+
+          <p>It would be premature to declare the end of dollar dominance. The greenback still accounts for 56 percent of global foreign currency reserves and is used in approximately 89 percent of currency exchanges. Oil trading, though increasingly diversified, remains heavily dollar-denominated. The depth and liquidity of U.S. capital markets have no near-term rival.</p>
+
+          <p>But the trends are unmistakable. Gold has surpassed U.S. Treasuries to become the world's top reserve asset by some measures. Central banks are diversifying away from dollar assets not because they expect the dollar to collapse, but because they have learned—through the example of Russia—that dependence on any single currency system carries risks. The World Gold Council projects that gold holdings could account for roughly a quarter of global reserves by the end of 2025, primarily as a result of price appreciation, but also reflecting genuine shifts in allocation.</p>
+
+          <p>J.P. Morgan forecasts gold prices pushing toward $5,000 per ounce by the fourth quarter of 2026, with $6,000 per ounce possible in the longer term. Goldman Sachs sees $4,900 by December 2026. Veteran analyst Ed Yardeni has projected $10,000 by 2028 if current trends persist. These are not fringe predictions; they are the base-case scenarios of major financial institutions.</p>
+
+          <p>For individual investors, the implications are significant. Gold and silver have historically served as hedges against inflation, currency debasement, and systemic financial risk. The current environment offers all three. But precious metals are also volatile, produce no income, and can be subject to government restrictions—as the Trump administration's 39 percent tariff on imported gold bars in August 2025 demonstrated. Any allocation requires weighing the potential for further gains against the risks of policy intervention and market correction.</p>
+
+          <p>For the global economy, the shift is more profound. A world in which nations hoard gold against the possibility of financial isolation is a world in which trust in international institutions has eroded. It is a world where economic statecraft—sanctions, tariffs, asset freezes—has become so weaponized that even allies hedge against each other. It is a world moving, however haltingly, toward a more multipolar financial order in which the dollar's writ no longer runs unchallenged.</p>
+
+          <p>The gold bars flowing into central bank vaults from Warsaw to Beijing to Washington are not just insurance policies against inflation. They are votes of no confidence in the system that has governed global finance for eighty years—and early bets on whatever comes next.</p>
+
+          <div class="los-endmark">■</div>
+
+          <div class="los-footer-sources">Sources include the World Gold Council, Brookings Institution, J.P. Morgan, Goldman Sachs, Fortune, CNBC, the Atlantic Council, Asia Times, Visual Capitalist, FXStreet, and central bank disclosures from Poland, Turkey, China, and Russia.</div>
         </div>
       </div>
     </div>
@@ -633,61 +373,37 @@
   </main>
 
   <script>
-    // Tab switching
     function switchTab(tab) {
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('page-' + tab).classList.add('active');
-      const labels = {macro:'Macro', news:'News', company:'Company', watchlist:'Watchlist'};
-      document.querySelectorAll('.tab-btn').forEach(b => {
-        if (b.textContent.includes(labels[tab])) b.classList.add('active');
-      });
+      const labels = {macro:'Macro',news:'News',company:'Company',watchlist:'Watchlist',los:'Line of Sight'};
+      document.querySelectorAll('.tab-btn').forEach(b => { if(b.textContent.includes(labels[tab])) b.classList.add('active'); });
       document.getElementById('tabNav').classList.remove('open');
-      window.scrollTo(0, 0);
+      window.scrollTo(0,0);
+      // Reset LOS to index when switching to it
+      if(tab === 'los') {
+        document.getElementById('los-index-view').style.display = 'block';
+        document.querySelectorAll('.los-article').forEach(a => a.classList.remove('active'));
+      }
     }
-
-    // Company search — rebuilds the TradingView chart widget with new symbol
+    function openArticle(id) {
+      document.getElementById('los-index-view').style.display = 'none';
+      document.getElementById('article-' + id).classList.add('active');
+      window.scrollTo(0,0);
+    }
+    function closeArticle() {
+      document.querySelectorAll('.los-article').forEach(a => a.classList.remove('active'));
+      document.getElementById('los-index-view').style.display = 'block';
+      window.scrollTo(0,0);
+    }
     function loadCompanyWidgets() {
       const ticker = document.getElementById('tickerSearch').value.toUpperCase().trim();
-      if (!ticker) return;
-
-      // Determine exchange prefix
-      const exchange = 'NASDAQ';
-      const symbol = exchange + ':' + ticker;
-
-      // Rebuild advanced chart
-      const chartContainer = document.getElementById('tradingview_advanced');
-      if (chartContainer) {
-        chartContainer.innerHTML = '';
-        new TradingView.widget({
-          "autosize": true,
-          "symbol": symbol,
-          "interval": "D",
-          "timezone": "America/New_York",
-          "theme": "dark",
-          "style": "1",
-          "locale": "en",
-          "enable_publishing": false,
-          "allow_symbol_change": true,
-          "studies": ["RSI@tv-basicstudies","MASimple@tv-basicstudies","MACD@tv-basicstudies"],
-          "container_id": "tradingview_advanced",
-          "hide_side_toolbar": false,
-          "withdateranges": true,
-          "details": true,
-          "hotlist": true,
-          "calendar": true,
-          "backgroundColor": "rgba(22, 27, 34, 1)",
-          "gridColor": "rgba(255, 255, 255, 0.04)"
-        });
-      }
-
-      // Note: Profile, Financials, and Technical Analysis widgets
-      // are initialized on page load with a default symbol.
-      // The advanced chart above supports symbol change directly.
-      // For the other widgets, users can use the chart's built-in
-      // symbol search to explore different companies.
+      if(!ticker) return;
+      const symbol = 'NASDAQ:' + ticker;
+      const c = document.getElementById('tradingview_advanced');
+      if(c) { c.innerHTML = ''; new TradingView.widget({"autosize":true,"symbol":symbol,"interval":"D","timezone":"America/New_York","theme":"dark","style":"1","locale":"en","enable_publishing":false,"allow_symbol_change":true,"studies":["RSI@tv-basicstudies","MASimple@tv-basicstudies","MACD@tv-basicstudies"],"container_id":"tradingview_advanced","hide_side_toolbar":false,"withdateranges":true,"details":true,"hotlist":true,"calendar":true,"backgroundColor":"rgba(22,27,34,1)","gridColor":"rgba(255,255,255,0.04)"}); }
     }
   </script>
-
 </body>
 </html>
