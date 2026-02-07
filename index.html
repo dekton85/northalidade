@@ -210,8 +210,16 @@
     <!-- ═══════ COMPANY ═══════ -->
     <div class="page" id="page-company">
       <div class="page-header"><h1>Company Analysis</h1><p>Search any ticker for real-time charts, financials, and technical analysis</p></div>
-      <div class="search-bar"><input type="text" class="search-input" placeholder="Enter ticker symbol (e.g. ASTS, AAPL, TSLA)..." id="tickerSearch" value="ASTS" onkeyup="if(event.key==='Enter') loadCompanyWidgets()"><button class="search-btn" onclick="loadCompanyWidgets()">Analyze</button></div>
-      <div id="companyWidgets"></div>
+      <div class="search-bar"><input type="text" class="search-input" placeholder="Enter ticker symbol (e.g. ASTS, AAPL, TSLA)..." id="tickerSearch" onkeyup="if(event.key==='Enter') loadCompanyWidgets()"><button class="search-btn" onclick="loadCompanyWidgets()">Analyze</button></div>
+      <script>
+        var _t = (new URLSearchParams(window.location.search)).get('ticker') || 'ASTS';
+        document.getElementById('tickerSearch').value = _t;
+        var _s = 'NASDAQ:' + _t;
+        document.write('<div class="full-width"><div class="card card-flush"><div class="widget-container" style="height:200px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"><\/div><scr'+'ipt type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js" async>{"width":"100%","height":"100%","isTransparent":true,"colorTheme":"dark","symbol":"'+_s+'","locale":"en"}<\/scr'+'ipt><\/div><\/div><\/div><\/div>');
+        document.write('<div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Advanced Chart<\/span><\/div><div class="widget-container" style="height:550px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div id="tradingview_advanced" style="height:calc(100% - 32px);width:100%"><\/div><scr'+'ipt type="text/javascript" src="https://s3.tradingview.com/tv.js"><\/scr'+'ipt><scr'+'ipt type="text/javascript">new TradingView.widget({"autosize":true,"symbol":"'+_s+'","interval":"D","timezone":"America/New_York","theme":"dark","style":"1","locale":"en","enable_publishing":false,"allow_symbol_change":true,"studies":["RSI@tv-basicstudies","MASimple@tv-basicstudies","MACD@tv-basicstudies"],"container_id":"tradingview_advanced","hide_side_toolbar":false,"withdateranges":true,"details":true,"hotlist":true,"calendar":true,"backgroundColor":"rgba(22,27,34,1)","gridColor":"rgba(255,255,255,0.04)"});<\/scr'+'ipt><\/div><\/div><\/div><\/div>');
+        document.write('<div class="grid-2"><div class="card card-flush"><div class="card-header"><span class="card-title">Financials<\/span><\/div><div class="widget-container" style="height:450px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"><\/div><scr'+'ipt type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-financials.js" async>{"isTransparent":true,"displayCurrency":"USD","width":"100%","height":"100%","colorTheme":"dark","symbol":"'+_s+'","locale":"en"}<\/scr'+'ipt><\/div><\/div><\/div>');
+        document.write('<div class="card card-flush"><div class="card-header"><span class="card-title">Technical Analysis<\/span><\/div><div class="widget-container" style="height:450px;"><div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"><\/div><scr'+'ipt type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>{"interval":"1D","width":"100%","height":"100%","isTransparent":true,"symbol":"'+_s+'","showIntervalTabs":true,"displayMode":"multiple","colorTheme":"dark","locale":"en"}<\/scr'+'ipt><\/div><\/div><\/div><\/div>');
+      </script>
     </div>
 
     <!-- ═══════ WATCHLIST ═══════ -->
@@ -390,67 +398,16 @@
       document.getElementById('los-index-view').style.display = 'block';
       window.scrollTo(0,0);
     }
-    function createWidgetFrame(parentEl, widthPx, heightPx, scriptSrc, config) {
-      config.width = widthPx;
-      config.height = heightPx;
-      var iframe = document.createElement('iframe');
-      iframe.style.cssText = 'width:100%;height:' + heightPx + 'px;border:none;display:block;overflow:hidden;';
-      iframe.setAttribute('scrolling', 'no');
-      parentEl.appendChild(iframe);
-      var doc = iframe.contentDocument || iframe.contentWindow.document;
-      doc.open();
-      doc.write('<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;overflow:hidden;}</style></head><body>'
-        + '<div class="tradingview-widget-container">'
-        + '<div class="tradingview-widget-container__widget"></div>'
-        + '<scr' + 'ipt type="text/javascript" src="' + scriptSrc + '">' + JSON.stringify(config) + '</scr' + 'ipt>'
-        + '</div></body></html>');
-      doc.close();
-    }
-
     function loadCompanyWidgets() {
       var ticker = document.getElementById('tickerSearch').value.toUpperCase().trim();
       if(!ticker) return;
-      var symbol = 'NASDAQ:' + ticker;
-      var uid = 'tv_' + Date.now();
-      var container = document.getElementById('companyWidgets');
-
-      container.innerHTML = ''
-        + '<div class="full-width"><div class="card card-flush"><div class="widget-container" id="w_profile"></div></div></div>'
-        + '<div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Advanced Chart</span></div>'
-        + '<div class="widget-container" style="height:550px;"><div id="' + uid + '" style="height:100%;width:100%"></div></div></div></div>'
-        + '<div class="grid-2">'
-        + '<div class="card card-flush"><div class="card-header"><span class="card-title">Financials</span></div><div class="widget-container" id="w_fin"></div></div>'
-        + '<div class="card card-flush"><div class="card-header"><span class="card-title">Technical Analysis</span></div><div class="widget-container" id="w_tech"></div></div>'
-        + '</div>';
-
-      // Get actual pixel width of the containers after render
-      setTimeout(function() {
-        var profileEl = document.getElementById('w_profile');
-        var finEl = document.getElementById('w_fin');
-        var techEl = document.getElementById('w_tech');
-
-        createWidgetFrame(profileEl, profileEl.offsetWidth, 360,
-          'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js',
-          {"isTransparent":true,"colorTheme":"dark","symbol":symbol,"locale":"en"});
-
-        createWidgetFrame(finEl, finEl.offsetWidth, 450,
-          'https://s3.tradingview.com/external-embedding/embed-widget-financials.js',
-          {"isTransparent":true,"displayCurrency":"USD","colorTheme":"dark","symbol":symbol,"locale":"en"});
-
-        createWidgetFrame(techEl, techEl.offsetWidth, 450,
-          'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',
-          {"interval":"1D","isTransparent":true,"symbol":symbol,"showIntervalTabs":true,"displayMode":"multiple","colorTheme":"dark","locale":"en"});
-      }, 50);
-
-      // Advanced chart via constructor
-      var tvjs = document.createElement('script');
-      tvjs.src = 'https://s3.tradingview.com/tv.js';
-      tvjs.onload = function() {
-        new TradingView.widget({"autosize":true,"symbol":symbol,"interval":"D","timezone":"America/New_York","theme":"dark","style":"1","locale":"en","enable_publishing":false,"allow_symbol_change":true,"studies":["RSI@tv-basicstudies","MASimple@tv-basicstudies","MACD@tv-basicstudies"],"container_id":uid,"hide_side_toolbar":false,"withdateranges":true,"details":true,"hotlist":true,"calendar":true,"backgroundColor":"rgba(22,27,34,1)","gridColor":"rgba(255,255,255,0.04)"});
-      };
-      document.head.appendChild(tvjs);
+      var url = window.location.pathname + '?ticker=' + ticker + '#company';
+      window.location.href = url;
     }
-    loadCompanyWidgets();
+    // Auto-switch to company tab if coming from search
+    if(window.location.hash === '#company') {
+      switchTab('company');
+    }
   </script>
 </body>
 </html>
