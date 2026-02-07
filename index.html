@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>North Alidade — Market Intelligence</title>
+  <meta name="description" content="North Alidade Market Intelligence — macro research, company analysis, and portfolio tracking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg-primary: #0B0E11;
+      --bg-secondary: #12161C;
+      --bg-card: #161B22;
+      --bg-card-hover: #1C222B;
+      --bg-elevated: #1E2530;
+      --border: rgba(255, 255, 255, 0.06);
+      --border-focus: rgba(255, 255, 255, 0.12);
+      --text-primary: #E6EDF3;
+      --text-secondary: #8B949E;
+      --text-muted: #484F58;
+      --green: #3FB950;
+      --green-dim: rgba(63, 185, 80, 0.15);
+      --red: #F85149;
+      --red-dim: rgba(248, 81, 73, 0.15);
+      --blue: #58A6FF;
+      --blue-dim: rgba(88, 166, 255, 0.12);
+      --amber: #D29922;
+      --amber-dim: rgba(210, 153, 34, 0.12);
+      --cyan: #56D4DD;
+      --font-ui: 'DM Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --font-display: 'Playfair Display', serif;
+      --radius: 8px;
+      --radius-lg: 12px;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font-ui); color: var(--text-primary); background: var(--bg-primary); line-height: 1.6; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--text-muted); border-radius: 3px; }
+
+    .topbar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; height: 56px; background: rgba(11, 14, 17, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 1.5rem; }
+    .topbar-left { display: flex; align-items: center; gap: 2rem; }
+    .brand { display: flex; align-items: center; gap: 0.6rem; text-decoration: none; }
+    .brand-compass { width: 28px; height: 28px; border: 2px solid var(--cyan); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.55rem; color: var(--cyan); }
+    .brand-text { font-family: var(--font-ui); font-weight: 600; font-size: 0.95rem; color: var(--text-primary); letter-spacing: 0.04em; }
+    .brand-text span { color: var(--cyan); }
+
+    .tab-nav { display: flex; gap: 0; height: 100%; }
+    .tab-btn { font-family: var(--font-ui); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-secondary); background: none; border: none; padding: 0 1.25rem; height: 56px; cursor: pointer; position: relative; transition: color 0.25s; }
+    .tab-btn:hover { color: var(--text-primary); }
+    .tab-btn.active { color: var(--cyan); }
+    .tab-btn.active::after { content: ''; position: absolute; bottom: 0; left: 0.75rem; right: 0.75rem; height: 2px; background: var(--cyan); border-radius: 2px 2px 0 0; }
+
+    .topbar-right { display: flex; align-items: center; gap: 1rem; }
+    .market-pulse { display: flex; gap: 1.25rem; font-family: var(--font-mono); font-size: 0.72rem; }
+    .pulse-item { display: flex; align-items: center; gap: 0.4rem; }
+    .pulse-label { color: var(--text-muted); }
+    .pulse-value { color: var(--text-primary); font-weight: 500; }
+    .pulse-change.up { color: var(--green); }
+    .pulse-change.down { color: var(--red); }
+    .mobile-menu-btn { display: none; background: none; border: 1px solid var(--border); border-radius: 6px; padding: 0.4rem 0.6rem; cursor: pointer; color: var(--text-secondary); font-size: 1.1rem; }
+
+    main { padding-top: 56px; min-height: 100vh; }
+    .page { display: none; padding: 1.5rem; max-width: 1440px; margin: 0 auto; }
+    .page.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+    .page-header { margin-bottom: 1.75rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+    .page-header h1 { font-family: var(--font-display); font-size: 1.6rem; font-weight: 500; margin-bottom: 0.25rem; }
+    .page-header p { font-size: 0.88rem; color: var(--text-secondary); }
+    .page-header .timestamp { font-family: var(--font-mono); font-size: 0.72rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+    .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; transition: border-color 0.3s, background 0.3s; }
+    .card:hover { border-color: var(--border-focus); background: var(--bg-card-hover); }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+    .card-title { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); }
+    .card-badge { font-family: var(--font-mono); font-size: 0.68rem; padding: 0.2rem 0.6rem; border-radius: 4px; font-weight: 500; }
+    .badge-green { background: var(--green-dim); color: var(--green); }
+    .badge-red { background: var(--red-dim); color: var(--red); }
+    .badge-blue { background: var(--blue-dim); color: var(--blue); }
+    .badge-amber { background: var(--amber-dim); color: var(--amber); }
+    .card-big-number { font-family: var(--font-mono); font-size: 2rem; font-weight: 500; line-height: 1.2; margin-bottom: 0.25rem; }
+    .card-subtitle { font-size: 0.82rem; color: var(--text-muted); }
+
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+
+    .chart-wrap { position: relative; height: 220px; margin-top: 0.75rem; }
+    .chart-wrap-lg { height: 300px; }
+
+    .yield-table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: 0.78rem; }
+    .yield-table th { text-align: left; color: var(--text-muted); font-weight: 400; font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+    .yield-table td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); color: var(--text-primary); }
+    .yield-table tr:last-child td { border-bottom: none; }
+
+    .news-item { padding: 1rem 0; border-bottom: 1px solid var(--border); cursor: pointer; transition: padding-left 0.2s; }
+    .news-item:hover { padding-left: 0.5rem; }
+    .news-item:last-child { border-bottom: none; }
+    .news-tag { font-family: var(--font-mono); font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.15rem 0.5rem; border-radius: 3px; display: inline-block; margin-bottom: 0.4rem; }
+    .tag-geopolitical { background: var(--red-dim); color: var(--red); }
+    .tag-fed { background: var(--blue-dim); color: var(--blue); }
+    .tag-earnings { background: var(--green-dim); color: var(--green); }
+    .tag-macro { background: var(--amber-dim); color: var(--amber); }
+    .tag-trade { background: rgba(86, 212, 221, 0.12); color: var(--cyan); }
+    .news-headline { font-size: 0.95rem; font-weight: 500; color: var(--text-primary); margin-bottom: 0.25rem; line-height: 1.4; }
+    .news-meta { font-size: 0.78rem; color: var(--text-muted); }
+    .news-source { color: var(--text-secondary); }
+
+    .search-bar { display: flex; gap: 0; margin-bottom: 1.5rem; }
+    .search-input { flex: 1; font-family: var(--font-mono); font-size: 0.9rem; padding: 0.85rem 1.25rem; background: var(--bg-card); border: 1px solid var(--border); border-right: none; border-radius: var(--radius) 0 0 var(--radius); color: var(--text-primary); outline: none; transition: border-color 0.3s; }
+    .search-input::placeholder { color: var(--text-muted); }
+    .search-input:focus { border-color: var(--cyan); }
+    .search-btn { font-family: var(--font-ui); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; background: var(--cyan); color: var(--bg-primary); border: 1px solid var(--cyan); border-radius: 0 var(--radius) var(--radius) 0; padding: 0 1.75rem; cursor: pointer; transition: all 0.25s; }
+    .search-btn:hover { background: #6DE0E8; }
+
+    .financials-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .financials-table th { text-align: left; color: var(--text-muted); font-size: 0.72rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); }
+    .financials-table td { padding: 0.65rem 0.75rem; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 0.82rem; }
+    .financials-table tr:last-child td { border-bottom: none; }
+    .financials-table .row-label { font-family: var(--font-ui); color: var(--text-secondary); }
+
+    .company-header { display: flex; align-items: flex-end; gap: 1.5rem; margin-bottom: 1.5rem; padding-bottom: 1.25rem; border-bottom: 1px solid var(--border); }
+    .company-ticker { font-family: var(--font-mono); font-size: 2.2rem; font-weight: 500; color: var(--cyan); line-height: 1; }
+    .company-name { font-size: 1rem; color: var(--text-secondary); }
+    .company-price-block { margin-left: auto; text-align: right; }
+    .company-price { font-family: var(--font-mono); font-size: 1.8rem; font-weight: 500; }
+    .company-change { font-family: var(--font-mono); font-size: 0.85rem; }
+
+    .watchlist-row { display: grid; grid-template-columns: 100px 1.5fr 1fr 1fr 1fr 120px; align-items: center; padding: 0.85rem 1rem; border-bottom: 1px solid var(--border); transition: background 0.2s; cursor: pointer; }
+    .watchlist-row:hover { background: var(--bg-card-hover); }
+    .watchlist-header { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border-focus); }
+    .watchlist-header:hover { background: transparent; cursor: default; }
+    .wl-ticker { font-family: var(--font-mono); font-weight: 600; font-size: 0.9rem; color: var(--cyan); }
+    .wl-name { font-size: 0.82rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .wl-price { font-family: var(--font-mono); font-size: 0.88rem; font-weight: 500; }
+    .wl-change { font-family: var(--font-mono); font-size: 0.82rem; font-weight: 500; }
+    .wl-mcap { font-family: var(--font-mono); font-size: 0.82rem; color: var(--text-secondary); }
+    .wl-sparkline { height: 32px; }
+    .up { color: var(--green); }
+    .down { color: var(--red); }
+
+    .metric-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .metric-row:last-child { border-bottom: none; }
+    .metric-label { color: var(--text-secondary); }
+    .metric-value { font-family: var(--font-mono); font-weight: 500; color: var(--text-primary); }
+
+    .sub-tabs { display: flex; gap: 0.25rem; margin-bottom: 1rem; padding: 0.25rem; background: var(--bg-secondary); border-radius: var(--radius); width: fit-content; }
+    .sub-tab { font-family: var(--font-ui); font-size: 0.75rem; font-weight: 500; color: var(--text-secondary); background: none; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; transition: all 0.2s; }
+    .sub-tab.active { background: var(--bg-elevated); color: var(--text-primary); }
+    .sub-tab:hover:not(.active) { color: var(--text-primary); }
+
+    .dash-footer { margin-top: 3rem; padding: 1.5rem; text-align: center; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted); }
+    .dash-footer a { color: var(--cyan); text-decoration: none; }
+
+    .api-banner { background: var(--amber-dim); border: 1px solid rgba(210, 153, 34, 0.25); border-radius: var(--radius); padding: 0.85rem 1.25rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; font-size: 0.85rem; }
+    .api-banner-icon { font-size: 1.1rem; }
+    .api-banner-text { color: var(--amber); }
+    .api-banner-text a { color: var(--amber); text-decoration: underline; }
+
+    @media (max-width: 1024px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: 1fr 1fr; }
+      .grid-2-1 { grid-template-columns: 1fr; }
+      .market-pulse { display: none; }
+    }
+    @media (max-width: 768px) {
+      .tab-nav { display: none; }
+      .tab-nav.open { display: flex; flex-direction: column; position: absolute; top: 56px; left: 0; right: 0; background: rgba(11, 14, 17, 0.97); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0.5rem; }
+      .tab-btn { height: 44px; text-align: left; padding: 0 1rem; }
+      .mobile-menu-btn { display: block; }
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .company-header { flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+      .company-price-block { margin-left: 0; text-align: left; }
+      .watchlist-row { grid-template-columns: 80px 1fr 1fr 1fr; }
+      .wl-name, .wl-sparkline { display: none; }
+      .page { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <div class="topbar-left">
+      <a href="#" class="brand">
+        <div class="brand-compass">▲</div>
+        <span class="brand-text">NORTH <span>ALIDADE</span></span>
+      </a>
+      <nav class="tab-nav" id="tabNav">
+        <button class="tab-btn active" onclick="switchTab('macro')">Macro</button>
+        <button class="tab-btn" onclick="switchTab('news')">News & Geopolitics</button>
+        <button class="tab-btn" onclick="switchTab('company')">Company Analysis</button>
+        <button class="tab-btn" onclick="switchTab('watchlist')">Watchlist</button>
+      </nav>
+    </div>
+    <div class="topbar-right">
+      <div class="market-pulse">
+        <div class="pulse-item"><span class="pulse-label">S&P</span><span class="pulse-value">6,025.99</span><span class="pulse-change up">+0.61%</span></div>
+        <div class="pulse-item"><span class="pulse-label">DXY</span><span class="pulse-value">107.52</span><span class="pulse-change down">−0.18%</span></div>
+        <div class="pulse-item"><span class="pulse-label">10Y</span><span class="pulse-value">4.49%</span><span class="pulse-change up">+2bp</span></div>
+      </div>
+      <button class="mobile-menu-btn" onclick="document.getElementById('tabNav').classList.toggle('open')">☰</button>
+    </div>
+  </div>
+
+  <main>
+    <!-- MACRO PAGE -->
+    <div class="page active" id="page-macro">
+      <div class="page-header">
+        <h1>Macro Environment</h1>
+        <p>Federal Reserve policy, inflation, labor markets & economic indicators</p>
+        <div class="timestamp">Last updated: Feb 06, 2026 · 15:30 EST</div>
+      </div>
+      <div class="api-banner"><span class="api-banner-icon">⚡</span><span class="api-banner-text">Prototype with sample data. Connect free <a href="https://fred.stlouisfed.org/docs/api/api_key.html" target="_blank">FRED</a> and <a href="https://finnhub.io/" target="_blank">Finnhub</a> API keys to pull live data.</span></div>
+      <div class="grid-4">
+        <div class="card"><div class="card-header"><span class="card-title">Fed Funds Rate</span><span class="card-badge badge-amber">HOLD</span></div><div class="card-big-number">4.25<span style="font-size:1rem;color:var(--text-muted)">%</span></div><div class="card-subtitle">Target: 4.25 – 4.50%</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">CPI (YoY)</span><span class="card-badge badge-red">↑ RISING</span></div><div class="card-big-number">2.9<span style="font-size:1rem;color:var(--text-muted)">%</span></div><div class="card-subtitle">Core CPI: 3.2% · Dec 2025</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">GDP Growth (Q4)</span><span class="card-badge badge-green">EXPANDING</span></div><div class="card-big-number">2.3<span style="font-size:1rem;color:var(--text-muted)">%</span></div><div class="card-subtitle">Annualized · Advance estimate</div></div>
+        <div class="card"><div class="card-header"><span class="card-title">Unemployment</span><span class="card-badge badge-blue">STABLE</span></div><div class="card-big-number">4.1<span style="font-size:1rem;color:var(--text-muted)">%</span></div><div class="card-subtitle">NFP: +256K · Jan 2026</div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-header"><span class="card-title">Federal Funds Rate — 5 Year</span></div><div class="chart-wrap chart-wrap-lg"><canvas id="chart-ffr"></canvas></div></div>
+        <div class="card"><div class="card-header"><span class="card-title">CPI Year-over-Year</span></div><div class="chart-wrap chart-wrap-lg"><canvas id="chart-cpi"></canvas></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Treasury Yield Curve</span><span class="card-badge badge-amber">NORMALIZING</span></div>
+          <div class="chart-wrap"><canvas id="chart-yield"></canvas></div>
+          <table class="yield-table" style="margin-top:1rem;"><thead><tr><th>Maturity</th><th>Yield</th><th>Chg (1D)</th><th>Chg (1M)</th></tr></thead><tbody>
+            <tr><td>1M</td><td>4.34%</td><td class="up">+1bp</td><td class="down">−8bp</td></tr>
+            <tr><td>3M</td><td>4.32%</td><td style="color:var(--text-muted)">0bp</td><td class="down">−5bp</td></tr>
+            <tr><td>2Y</td><td>4.21%</td><td class="up">+3bp</td><td class="up">+12bp</td></tr>
+            <tr><td>10Y</td><td>4.49%</td><td class="up">+2bp</td><td class="up">+22bp</td></tr>
+            <tr><td>30Y</td><td>4.68%</td><td class="up">+1bp</td><td class="up">+15bp</td></tr>
+          </tbody></table>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">Real GDP Growth (Quarterly)</span></div>
+          <div class="chart-wrap chart-wrap-lg"><canvas id="chart-gdp"></canvas></div>
+          <div style="margin-top:1rem;">
+            <div class="metric-row"><span class="metric-label">Consumer Spending</span><span class="metric-value up">+3.1%</span></div>
+            <div class="metric-row"><span class="metric-label">Business Investment</span><span class="metric-value up">+1.8%</span></div>
+            <div class="metric-row"><span class="metric-label">Gov't Spending</span><span class="metric-value up">+2.5%</span></div>
+            <div class="metric-row"><span class="metric-label">Net Exports</span><span class="metric-value down">−0.4%</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NEWS PAGE -->
+    <div class="page" id="page-news">
+      <div class="page-header">
+        <h1>News & Geopolitics</h1>
+        <p>Market-moving headlines, policy shifts, and geopolitical developments</p>
+        <div class="timestamp"></div>
+      </div>
+      <div class="api-banner"><span class="api-banner-icon">⚡</span><span class="api-banner-text">Connect a free <a href="https://finnhub.io/" target="_blank">Finnhub</a> API key to pull live headlines.</span></div>
+      <div class="grid-2-1">
+        <div class="card">
+          <div class="card-header"><span class="card-title">Latest Headlines</span></div>
+          <div class="news-item"><span class="news-tag tag-fed">Federal Reserve</span><div class="news-headline">Fed Officials Signal Patience on Rate Cuts Amid Sticky Inflation</div><div class="news-meta"><span class="news-source">Reuters</span> · 42 min ago</div></div>
+          <div class="news-item"><span class="news-tag tag-geopolitical">Geopolitical</span><div class="news-headline">EU Proposes New Sanctions Package Targeting Russian Energy Sector</div><div class="news-meta"><span class="news-source">Financial Times</span> · 1hr ago</div></div>
+          <div class="news-item"><span class="news-tag tag-trade">Trade</span><div class="news-headline">U.S.-China Trade Talks Resume as Tariff Deadline Approaches</div><div class="news-meta"><span class="news-source">WSJ</span> · 2hr ago</div></div>
+          <div class="news-item"><span class="news-tag tag-earnings">Earnings</span><div class="news-headline">Amazon Beats Q4 Estimates; AWS Revenue Accelerates to 19% Growth</div><div class="news-meta"><span class="news-source">Bloomberg</span> · 3hr ago</div></div>
+          <div class="news-item"><span class="news-tag tag-macro">Macro</span><div class="news-headline">January Jobs Report Surprises: 256K Added, Unemployment Holds at 4.1%</div><div class="news-meta"><span class="news-source">BLS / CNBC</span> · 5hr ago</div></div>
+          <div class="news-item"><span class="news-tag tag-geopolitical">Geopolitical</span><div class="news-headline">Middle East Tensions Rise as Red Sea Shipping Routes Face New Disruptions</div><div class="news-meta"><span class="news-source">Al Jazeera</span> · 6hr ago</div></div>
+          <div class="news-item"><span class="news-tag tag-trade">Trade</span><div class="news-headline">India Announces New Semiconductor Manufacturing Incentives to Rival China</div><div class="news-meta"><span class="news-source">Nikkei Asia</span> · 10hr ago</div></div>
+        </div>
+        <div>
+          <div class="card" style="margin-bottom:1rem;"><div class="card-header"><span class="card-title">Fear & Greed Index</span><span class="card-badge badge-amber">NEUTRAL</span></div><div class="card-big-number" style="text-align:center;margin:1rem 0;">52</div><div class="card-subtitle" style="text-align:center;">Shifted from "Greed" last week</div></div>
+          <div class="card" style="margin-bottom:1rem;"><div class="card-header"><span class="card-title">VIX — Volatility</span></div><div class="card-big-number">16.54</div><div class="card-subtitle down">+1.23 (+8.0%) today</div></div>
+          <div class="card" style="margin-bottom:1rem;"><div class="card-header"><span class="card-title">Commodities</span></div>
+            <div class="metric-row"><span class="metric-label">WTI Crude</span><span class="metric-value">$73.12 <small class="up">+1.2%</small></span></div>
+            <div class="metric-row"><span class="metric-label">Gold</span><span class="metric-value">$2,862 <small class="up">+0.4%</small></span></div>
+            <div class="metric-row"><span class="metric-label">Copper</span><span class="metric-value">$4.25 <small class="down">−0.6%</small></span></div>
+            <div class="metric-row"><span class="metric-label">Nat Gas</span><span class="metric-value">$3.18 <small class="up">+3.1%</small></span></div>
+          </div>
+          <div class="card"><div class="card-header"><span class="card-title">Key Upcoming Events</span></div>
+            <div class="metric-row"><span class="metric-label">Feb 12</span><span class="metric-value" style="font-family:var(--font-ui);font-size:0.82rem;">CPI Release</span></div>
+            <div class="metric-row"><span class="metric-label">Feb 14</span><span class="metric-value" style="font-family:var(--font-ui);font-size:0.82rem;">Retail Sales</span></div>
+            <div class="metric-row"><span class="metric-label">Feb 19</span><span class="metric-value" style="font-family:var(--font-ui);font-size:0.82rem;">FOMC Minutes</span></div>
+            <div class="metric-row"><span class="metric-label">Mar 19</span><span class="metric-value" style="font-family:var(--font-ui);font-size:0.82rem;">FOMC Decision</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPANY PAGE -->
+    <div class="page" id="page-company">
+      <div class="page-header">
+        <h1>Company Analysis</h1>
+        <p>Deep-dive financials, valuation metrics, and fundamental data</p>
+      </div>
+      <div class="api-banner"><span class="api-banner-icon">⚡</span><span class="api-banner-text">Connect <a href="https://site.financialmodelingprep.com/developer" target="_blank">Financial Modeling Prep</a> API key for live financial data.</span></div>
+      <div class="search-bar">
+        <input type="text" class="search-input" placeholder="Search ticker (e.g. ASTS, AAPL, TSLA)..." id="tickerSearch" onkeyup="if(event.key==='Enter') loadCompany()">
+        <button class="search-btn" onclick="loadCompany()">Analyze</button>
+      </div>
+      <div id="companyContent">
+        <div class="company-header">
+          <div><div class="company-ticker">ASTS</div><div class="company-name">AST SpaceMobile, Inc. — Satellite Telecommunications</div></div>
+          <div class="company-price-block"><div class="company-price">$24.87</div><div class="company-change up">+$1.34 (+5.69%) today</div></div>
+        </div>
+        <div class="sub-tabs">
+          <button class="sub-tab active" onclick="switchSubTab(this,'overview')">Overview</button>
+          <button class="sub-tab" onclick="switchSubTab(this,'financials')">Financials</button>
+          <button class="sub-tab" onclick="switchSubTab(this,'valuation')">Valuation</button>
+        </div>
+        <div class="company-sub active" id="sub-overview">
+          <div class="grid-4">
+            <div class="card"><div class="card-title" style="margin-bottom:0.5rem;">Market Cap</div><div class="card-big-number" style="font-size:1.5rem;">$7.8B</div></div>
+            <div class="card"><div class="card-title" style="margin-bottom:0.5rem;">Enterprise Value</div><div class="card-big-number" style="font-size:1.5rem;">$8.1B</div></div>
+            <div class="card"><div class="card-title" style="margin-bottom:0.5rem;">52-Wk Range</div><div class="card-big-number" style="font-size:1.5rem;">$2.81–$39</div></div>
+            <div class="card"><div class="card-title" style="margin-bottom:0.5rem;">Avg Volume</div><div class="card-big-number" style="font-size:1.5rem;">18.4M</div></div>
+          </div>
+          <div class="grid-2">
+            <div class="card"><div class="card-header"><span class="card-title">Price Chart — 1 Year</span></div><div class="chart-wrap chart-wrap-lg"><canvas id="chart-asts"></canvas></div></div>
+            <div class="card"><div class="card-header"><span class="card-title">Key Metrics</span></div>
+              <div class="metric-row"><span class="metric-label">P/E Ratio</span><span class="metric-value">N/A (Pre-revenue)</span></div>
+              <div class="metric-row"><span class="metric-label">EV / Fwd Revenue</span><span class="metric-value">32.4x</span></div>
+              <div class="metric-row"><span class="metric-label">Cash & Equivalents</span><span class="metric-value">$524M</span></div>
+              <div class="metric-row"><span class="metric-label">Total Debt</span><span class="metric-value">$698M</span></div>
+              <div class="metric-row"><span class="metric-label">Shares Outstanding</span><span class="metric-value">313.5M</span></div>
+              <div class="metric-row"><span class="metric-label">Short Interest</span><span class="metric-value">15.2%</span></div>
+              <div class="metric-row"><span class="metric-label">Institutional Ownership</span><span class="metric-value">38.7%</span></div>
+              <div class="metric-row"><span class="metric-label">Next Earnings</span><span class="metric-value">Feb 27, 2026</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="company-sub" id="sub-financials" style="display:none;">
+          <div class="card" style="margin-bottom:1rem;">
+            <div class="card-header"><span class="card-title">Income Statement (Annual, $M)</span></div>
+            <table class="financials-table"><thead><tr><th></th><th>FY2023</th><th>FY2024</th><th>FY2025E</th></tr></thead><tbody>
+              <tr><td class="row-label">Revenue</td><td>$1.8</td><td>$0.9</td><td>$48.0</td></tr>
+              <tr><td class="row-label">Gross Profit</td><td>$1.8</td><td>$0.9</td><td>$36.0</td></tr>
+              <tr><td class="row-label">R&D Expense</td><td>($72.4)</td><td>($103.8)</td><td>($88.0)</td></tr>
+              <tr><td class="row-label">SG&A</td><td>($38.1)</td><td>($52.6)</td><td>($45.0)</td></tr>
+              <tr><td class="row-label">Operating Income</td><td class="down">($108.7)</td><td class="down">($155.5)</td><td class="down">($97.0)</td></tr>
+              <tr><td class="row-label">Net Income</td><td class="down">($120.3)</td><td class="down">($171.2)</td><td class="down">($110.0)</td></tr>
+              <tr><td class="row-label">EPS</td><td class="down">($0.52)</td><td class="down">($0.60)</td><td class="down">($0.35)</td></tr>
+            </tbody></table>
+          </div>
+          <div class="card">
+            <div class="card-header"><span class="card-title">Balance Sheet ($M)</span></div>
+            <table class="financials-table"><thead><tr><th></th><th>FY2023</th><th>FY2024</th></tr></thead><tbody>
+              <tr><td class="row-label">Cash</td><td>$243</td><td>$524</td></tr>
+              <tr><td class="row-label">Total Assets</td><td>$712</td><td>$1,480</td></tr>
+              <tr><td class="row-label">Total Debt</td><td>$186</td><td>$698</td></tr>
+              <tr><td class="row-label">Equity</td><td>$382</td><td>$545</td></tr>
+              <tr><td class="row-label">Debt/Equity</td><td>0.49x</td><td>1.28x</td></tr>
+            </tbody></table>
+          </div>
+        </div>
+        <div class="company-sub" id="sub-valuation" style="display:none;">
+          <div class="grid-3">
+            <div class="card"><div class="card-title" style="margin-bottom:0.75rem;">DCF Scenarios</div>
+              <div class="metric-row"><span class="metric-label">🐻 Bear</span><span class="metric-value down">$8.50</span></div>
+              <div class="metric-row"><span class="metric-label">📊 Base</span><span class="metric-value" style="color:var(--cyan);">$28.00</span></div>
+              <div class="metric-row"><span class="metric-label">🐂 Bull</span><span class="metric-value up">$62.00</span></div>
+              <div style="margin-top:0.75rem;font-size:0.78rem;color:var(--text-muted);">WACC: 12.5% · Terminal: 3%</div>
+            </div>
+            <div class="card"><div class="card-title" style="margin-bottom:0.75rem;">Relative Valuation</div>
+              <div class="metric-row"><span class="metric-label">EV/Rev (2026E)</span><span class="metric-value">16.2x</span></div>
+              <div class="metric-row"><span class="metric-label">Peer Avg</span><span class="metric-value">8.4x</span></div>
+              <div class="metric-row"><span class="metric-label">Premium</span><span class="metric-value" style="color:var(--amber);">+93%</span></div>
+            </div>
+            <div class="card"><div class="card-title" style="margin-bottom:0.75rem;">Analyst Consensus</div>
+              <div class="metric-row"><span class="metric-label">Rating</span><span class="metric-value up">BUY (8/11)</span></div>
+              <div class="metric-row"><span class="metric-label">Avg PT</span><span class="metric-value">$36.50</span></div>
+              <div class="metric-row"><span class="metric-label">Range</span><span class="metric-value">$12–$55</span></div>
+            </div>
+          </div>
+          <div class="card"><div class="card-header"><span class="card-title">Revenue Projections</span></div><div class="chart-wrap chart-wrap-lg"><canvas id="chart-revenue"></canvas></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WATCHLIST PAGE -->
+    <div class="page" id="page-watchlist">
+      <div class="page-header">
+        <h1>Watchlist</h1>
+        <p>Track your tickers — quotes, performance, and key data at a glance</p>
+        <div class="timestamp"></div>
+      </div>
+      <div class="api-banner"><span class="api-banner-icon">⚡</span><span class="api-banner-text">Connect <a href="https://finnhub.io/" target="_blank">Finnhub</a> or <a href="https://www.alphavantage.co/" target="_blank">Alpha Vantage</a> for live quotes.</span></div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="watchlist-row watchlist-header"><span>Ticker</span><span>Company</span><span>Price</span><span>Change</span><span>Mkt Cap</span><span>7D Trend</span></div>
+        <div class="watchlist-row" onclick="switchTab('company')"><span class="wl-ticker">ASTS</span><span class="wl-name">AST SpaceMobile</span><span class="wl-price">$24.87</span><span class="wl-change up">+5.69%</span><span class="wl-mcap">$7.8B</span><canvas class="wl-sparkline" id="spark-asts"></canvas></div>
+        <div class="watchlist-row"><span class="wl-ticker">AAPL</span><span class="wl-name">Apple Inc.</span><span class="wl-price">$232.47</span><span class="wl-change up">+1.12%</span><span class="wl-mcap">$3.55T</span><canvas class="wl-sparkline" id="spark-aapl"></canvas></div>
+        <div class="watchlist-row"><span class="wl-ticker">NVDA</span><span class="wl-name">NVIDIA Corp.</span><span class="wl-price">$128.34</span><span class="wl-change down">−2.31%</span><span class="wl-mcap">$3.14T</span><canvas class="wl-sparkline" id="spark-nvda"></canvas></div>
+        <div class="watchlist-row"><span class="wl-ticker">MSFT</span><span class="wl-name">Microsoft Corp.</span><span class="wl-price">$415.20</span><span class="wl-change up">+0.84%</span><span class="wl-mcap">$3.09T</span><canvas class="wl-sparkline" id="spark-msft"></canvas></div>
+        <div class="watchlist-row"><span class="wl-ticker">AMZN</span><span class="wl-name">Amazon.com Inc.</span><span class="wl-price">$233.15</span><span class="wl-change up">+2.44%</span><span class="wl-mcap">$2.45T</span><canvas class="wl-sparkline" id="spark-amzn"></canvas></div>
+        <div class="watchlist-row"><span class="wl-ticker">TSLA</span><span class="wl-name">Tesla Inc.</span><span class="wl-price">$378.62</span><span class="wl-change down">−1.87%</span><span class="wl-mcap">$1.21T</span><canvas class="wl-sparkline" id="spark-tsla"></canvas></div>
+        <div class="watchlist-row"><span class="wl-ticker">META</span><span class="wl-name">Meta Platforms</span><span class="wl-price">$712.30</span><span class="wl-change up">+0.55%</span><span class="wl-mcap">$1.81T</span><canvas class="wl-sparkline" id="spark-meta"></canvas></div>
+        <div class="watchlist-row"><span class="wl-ticker">PLTR</span><span class="wl-name">Palantir Technologies</span><span class="wl-price">$118.45</span><span class="wl-change up">+4.21%</span><span class="wl-mcap">$269B</span><canvas class="wl-sparkline" id="spark-pltr"></canvas></div>
+      </div>
+    </div>
+
+    <div class="dash-footer">© 2026 North Alidade · Market Intelligence · <a href="https://northalidade.com">northalidade.com</a></div>
+  </main>
+
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('page-' + tab).classList.add('active');
+      const labels = {macro:'Macro',news:'News',company:'Company',watchlist:'Watchlist'};
+      document.querySelectorAll('.tab-btn').forEach(b => { if(b.textContent.includes(labels[tab])) b.classList.add('active'); });
+      document.getElementById('tabNav').classList.remove('open');
+      if(tab==='macro') initMacroCharts();
+      if(tab==='company') initCompanyCharts();
+      if(tab==='watchlist') initSparklines();
+    }
+    function switchSubTab(btn, sub) {
+      document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.company-sub').forEach(s => s.style.display='none');
+      btn.classList.add('active');
+      document.getElementById('sub-'+sub).style.display='block';
+      if(sub==='valuation') initRevenueChart();
+    }
+    function loadCompany() {
+      const v = document.getElementById('tickerSearch').value.toUpperCase();
+      if(v) alert('Connect your API key to load live data for '+v+'. Currently showing ASTS sample data.');
+    }
+
+    Chart.defaults.color = '#8B949E';
+    Chart.defaults.borderColor = 'rgba(255,255,255,0.04)';
+    Chart.defaults.font.family = "'DM Sans', sans-serif";
+    Chart.defaults.font.size = 11;
+    const CI = {};
+
+    let macroInit = false;
+    function initMacroCharts() {
+      if(macroInit) return; macroInit = true;
+      const gridColor = 'rgba(255,255,255,0.03)';
+      CI.ffr = new Chart(document.getElementById('chart-ffr'), { type:'line', data:{ labels:['2021','','','','2022','','','','2023','','','','2024','','','','2025','','','','2026'], datasets:[{data:[0.08,0.08,0.08,0.08,0.08,0.33,0.83,1.58,3.33,4.33,4.58,4.83,5.08,5.33,5.33,5.33,5.33,5.33,5.08,4.58,4.33], borderColor:'#58A6FF', backgroundColor:'rgba(88,166,255,0.08)', fill:true, tension:0.3, pointRadius:0, borderWidth:2}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{ticks:{callback:v=>v+'%'},grid:{color:gridColor}},x:{grid:{display:false}}} } });
+      CI.cpi = new Chart(document.getElementById('chart-cpi'), { type:'line', data:{ labels:['Jan 24','Mar','May','Jul','Sep','Nov','Jan 25','Mar','May','Jul','Sep','Nov','Jan 26'], datasets:[{label:'CPI',data:[3.1,3.2,3.3,2.9,2.4,2.7,2.9,2.8,2.7,2.6,2.4,2.7,2.9],borderColor:'#F85149',backgroundColor:'rgba(248,81,73,0.06)',fill:true,tension:0.3,pointRadius:0,borderWidth:2},{label:'Core CPI',data:[3.9,3.8,3.4,3.2,3.2,3.3,3.3,3.2,3.1,3.0,3.0,3.2,3.2],borderColor:'#D29922',borderDash:[5,4],tension:0.3,pointRadius:0,borderWidth:1.5,fill:false}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top',labels:{boxWidth:12,padding:15}}}, scales:{y:{ticks:{callback:v=>v+'%'},grid:{color:gridColor}},x:{grid:{display:false}}} } });
+      CI.yield = new Chart(document.getElementById('chart-yield'), { type:'line', data:{ labels:['1M','3M','6M','1Y','2Y','3Y','5Y','7Y','10Y','20Y','30Y'], datasets:[{data:[4.34,4.32,4.28,4.18,4.21,4.27,4.35,4.42,4.49,4.72,4.68],borderColor:'#56D4DD',backgroundColor:'rgba(86,212,221,0.08)',fill:true,tension:0.4,pointRadius:4,pointBackgroundColor:'#56D4DD',pointBorderColor:'#161B22',pointBorderWidth:2,borderWidth:2}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{min:4.0,max:4.9,ticks:{callback:v=>v.toFixed(1)+'%'},grid:{color:gridColor}},x:{grid:{display:false}}} } });
+      const gdpD = [1.4,3.0,3.1,2.5,2.2,2.8,2.6,2.3];
+      CI.gdp = new Chart(document.getElementById('chart-gdp'), { type:'bar', data:{ labels:['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25','Q3 25','Q4 25'], datasets:[{data:gdpD,backgroundColor:gdpD.map(v=>v>=2.5?'rgba(63,185,80,0.6)':'rgba(63,185,80,0.3)'),borderColor:gdpD.map(v=>v>=2.5?'#3FB950':'rgba(63,185,80,0.5)'),borderWidth:1,borderRadius:4}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{ticks:{callback:v=>v+'%'},grid:{color:gridColor}},x:{grid:{display:false}}} } });
+    }
+
+    let compInit = false;
+    function initCompanyCharts() {
+      if(compInit) return; compInit = true;
+      CI.asts = new Chart(document.getElementById('chart-asts'), { type:'line', data:{ labels:['Feb 25','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan 26','Feb'], datasets:[{data:[3.8,5.2,8.4,12.5,16.8,22.3,35.4,28.6,19.8,22.4,18.9,23.1,24.87],borderColor:'#56D4DD',backgroundColor:'rgba(86,212,221,0.06)',fill:true,tension:0.35,pointRadius:0,borderWidth:2}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{ticks:{callback:v=>'$'+v},grid:{color:'rgba(255,255,255,0.03)'}},x:{grid:{display:false}}} } });
+    }
+
+    function initRevenueChart() {
+      if(CI.revenue) return;
+      CI.revenue = new Chart(document.getElementById('chart-revenue'), { type:'bar', data:{ labels:['FY2023','FY2024','FY2025E','FY2026E','FY2027E','FY2028E'], datasets:[{label:'Revenue ($M)',data:[1.8,0.9,48,250,680,1400],backgroundColor:'rgba(86,212,221,0.5)',borderColor:'#56D4DD',borderWidth:1,borderRadius:4},{label:'Net Income ($M)',data:[-120,-171,-110,-45,80,380],backgroundColor:ctx=>ctx.parsed.y>=0?'rgba(63,185,80,0.5)':'rgba(248,81,73,0.35)',borderColor:ctx=>ctx.parsed.y>=0?'#3FB950':'#F85149',borderWidth:1,borderRadius:4}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{position:'top',labels:{boxWidth:12,padding:15}}}, scales:{y:{ticks:{callback:v=>'$'+v+'M'},grid:{color:'rgba(255,255,255,0.03)'}},x:{grid:{display:false}}} } });
+    }
+
+    let sparksInit = false;
+    function initSparklines() {
+      if(sparksInit) return; sparksInit = true;
+      const sd = {asts:[21.2,20.8,22.1,23.5,22.9,24.1,24.87],aapl:[228.5,229.1,230.8,229.3,231.2,231.8,232.47],nvda:[134.2,132.8,131.5,133.1,130.8,129.5,128.34],msft:[410.2,411.5,413.2,412.8,414.1,414.8,415.2],amzn:[224.8,226.3,225.1,228.5,230.2,231.8,233.15],tsla:[392.5,388.2,385.6,382.1,380.5,379.8,378.62],meta:[705.8,708.2,710.5,709.1,711.8,712.0,712.3],pltr:[108.5,110.2,112.8,114.5,115.2,117.1,118.45]};
+      Object.entries(sd).forEach(([t,d])=>{const c=document.getElementById('spark-'+t);if(!c)return;const up=d[d.length-1]>=d[0];new Chart(c,{type:'line',data:{labels:d.map((_,i)=>i),datasets:[{data:d,borderColor:up?'#3FB950':'#F85149',borderWidth:1.5,pointRadius:0,tension:0.4,fill:false}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}},animation:false}});});
+    }
+
+    initMacroCharts();
+    function updateTime(){const n=new Date();const t=n.toLocaleDateString('en-US',{month:'short',day:'2-digit',year:'numeric'})+' · '+n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',timeZoneName:'short'});document.querySelectorAll('.timestamp').forEach(e=>e.textContent='Last updated: '+t);}
+    updateTime(); setInterval(updateTime,60000);
+  </script>
+</body>
+</html>
