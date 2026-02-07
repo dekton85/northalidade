@@ -390,47 +390,33 @@
       document.getElementById('los-index-view').style.display = 'block';
       window.scrollTo(0,0);
     }
-    function createWidgetFrame(parentEl, height, scriptSrc, config) {
-      parentEl.style.height = height;
-      var iframe = document.createElement('iframe');
-      iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;';
-      parentEl.appendChild(iframe);
-      var doc = iframe.contentDocument || iframe.contentWindow.document;
-      doc.open();
-      doc.write('<!DOCTYPE html><html><head><style>html,body{margin:0;padding:0;overflow:hidden;background:transparent;width:100%;height:100%;}</style></head><body>'
-        + '<div class="tradingview-widget-container" style="height:100%;width:100%">'
-        + '<div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>'
-        + '<scr' + 'ipt type="text/javascript" src="' + scriptSrc + '">' + JSON.stringify(config) + '</scr' + 'ipt>'
-        + '</div></body></html>');
-      doc.close();
-    }
-
     function loadCompanyWidgets() {
       var ticker = document.getElementById('tickerSearch').value.toUpperCase().trim();
       if(!ticker) return;
       var symbol = 'NASDAQ:' + ticker;
       var uid = 'tv_' + Date.now();
       var container = document.getElementById('companyWidgets');
+
+      var profileUrl = 'https://www.tradingview.com/embed-widget/symbol-profile/?locale=en&colorTheme=dark&isTransparent=true&symbol=' + encodeURIComponent(symbol);
+      var financialsUrl = 'https://www.tradingview.com/embed-widget/financials/?locale=en&colorTheme=dark&isTransparent=true&displayCurrency=USD&symbol=' + encodeURIComponent(symbol);
+      var technicalUrl = 'https://www.tradingview.com/embed-widget/technical-analysis/?locale=en&colorTheme=dark&isTransparent=true&interval=1D&showIntervalTabs=true&displayMode=multiple&symbol=' + encodeURIComponent(symbol);
+
       container.innerHTML = ''
-        + '<div class="full-width"><div class="card card-flush"><div class="widget-container" style="height:200px;" id="w_profile"></div></div></div>'
+        + '<div class="full-width"><div class="card card-flush"><div class="widget-container" style="height:200px;">'
+        + '<iframe src="' + profileUrl + '" style="width:100%;height:100%;border:none;display:block;"></iframe>'
+        + '</div></div></div>'
+
         + '<div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Advanced Chart</span></div>'
         + '<div class="widget-container" style="height:550px;"><div id="' + uid + '" style="height:100%;width:100%"></div></div></div></div>'
+
         + '<div class="grid-2">'
-        + '<div class="card card-flush"><div class="card-header"><span class="card-title">Financials</span></div><div class="widget-container" style="height:450px;" id="w_fin"></div></div>'
-        + '<div class="card card-flush"><div class="card-header"><span class="card-title">Technical Analysis</span></div><div class="widget-container" style="height:450px;" id="w_tech"></div></div>'
+        + '<div class="card card-flush"><div class="card-header"><span class="card-title">Financials</span></div><div class="widget-container" style="height:450px;">'
+        + '<iframe src="' + financialsUrl + '" style="width:100%;height:100%;border:none;display:block;"></iframe>'
+        + '</div></div>'
+        + '<div class="card card-flush"><div class="card-header"><span class="card-title">Technical Analysis</span></div><div class="widget-container" style="height:450px;">'
+        + '<iframe src="' + technicalUrl + '" style="width:100%;height:100%;border:none;display:block;"></iframe>'
+        + '</div></div>'
         + '</div>';
-
-      createWidgetFrame(document.getElementById('w_profile'), '200px',
-        'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js',
-        {"width":"100%","height":"100%","isTransparent":true,"colorTheme":"dark","symbol":symbol,"locale":"en"});
-
-      createWidgetFrame(document.getElementById('w_fin'), '450px',
-        'https://s3.tradingview.com/external-embedding/embed-widget-financials.js',
-        {"isTransparent":true,"displayCurrency":"USD","width":"100%","height":"100%","colorTheme":"dark","symbol":symbol,"locale":"en"});
-
-      createWidgetFrame(document.getElementById('w_tech'), '450px',
-        'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',
-        {"interval":"1D","width":"100%","height":"100%","isTransparent":true,"symbol":symbol,"showIntervalTabs":true,"displayMode":"multiple","colorTheme":"dark","locale":"en"});
 
       // Advanced chart via constructor
       var tvjs = document.createElement('script');
