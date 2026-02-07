@@ -211,14 +211,7 @@
     <div class="page" id="page-company">
       <div class="page-header"><h1>Company Analysis</h1><p>Search any ticker for real-time charts, financials, and technical analysis</p></div>
       <div class="search-bar"><input type="text" class="search-input" placeholder="Enter ticker symbol (e.g. ASTS, AAPL, TSLA)..." id="tickerSearch" value="ASTS" onkeyup="if(event.key==='Enter') loadCompanyWidgets()"><button class="search-btn" onclick="loadCompanyWidgets()">Analyze</button></div>
-      <div id="companyWidgets">
-        <div class="full-width"><div class="card card-flush"><div class="widget-container" style="height:200px;" id="profileContainer"></div></div></div>
-        <div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Advanced Chart</span></div><div class="widget-container" style="height:550px;" id="chartContainer"></div></div></div>
-        <div class="grid-2">
-          <div class="card card-flush"><div class="card-header"><span class="card-title">Financials</span></div><div class="widget-container" style="height:450px;" id="financialsContainer"></div></div>
-          <div class="card card-flush"><div class="card-header"><span class="card-title">Technical Analysis</span></div><div class="widget-container" style="height:450px;" id="technicalContainer"></div></div>
-        </div>
-      </div>
+      <div id="companyWidgets"></div>
     </div>
 
     <!-- ═══════ WATCHLIST ═══════ -->
@@ -397,37 +390,52 @@
       document.getElementById('los-index-view').style.display = 'block';
       window.scrollTo(0,0);
     }
-    function injectWidget(containerId, scriptSrc, config) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = '<div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div></div>';
-      const sc = document.createElement('script');
-      sc.type = 'text/javascript';
-      sc.src = scriptSrc;
-      sc.async = true;
-      sc.textContent = JSON.stringify(config);
-      container.querySelector('.tradingview-widget-container').appendChild(sc);
-    }
-    function injectAdvancedChart(containerId, symbol) {
-      const container = document.getElementById(containerId);
-      const uid = 'tv_chart_' + Date.now();
-      container.innerHTML = '<div class="tradingview-widget-container" style="height:100%;width:100%"><div id="' + uid + '" style="height:calc(100% - 32px);width:100%"></div></div>';
-      const sc = document.createElement('script');
-      sc.src = 'https://s3.tradingview.com/tv.js';
-      sc.onload = function() {
-        new TradingView.widget({"autosize":true,"symbol":symbol,"interval":"D","timezone":"America/New_York","theme":"dark","style":"1","locale":"en","enable_publishing":false,"allow_symbol_change":true,"studies":["RSI@tv-basicstudies","MASimple@tv-basicstudies","MACD@tv-basicstudies"],"container_id":uid,"hide_side_toolbar":false,"withdateranges":true,"details":true,"hotlist":true,"calendar":true,"backgroundColor":"rgba(22,27,34,1)","gridColor":"rgba(255,255,255,0.04)"});
-      };
-      container.querySelector('.tradingview-widget-container').appendChild(sc);
-    }
     function loadCompanyWidgets() {
       const ticker = document.getElementById('tickerSearch').value.toUpperCase().trim();
       if(!ticker) return;
       const symbol = 'NASDAQ:' + ticker;
-      injectWidget('profileContainer', 'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js', {"width":"100%","height":"100%","isTransparent":true,"colorTheme":"dark","symbol":symbol,"locale":"en"});
-      injectAdvancedChart('chartContainer', symbol);
-      injectWidget('financialsContainer', 'https://s3.tradingview.com/external-embedding/embed-widget-financials.js', {"isTransparent":true,"displayCurrency":"USD","width":"100%","height":"100%","colorTheme":"dark","symbol":symbol,"locale":"en"});
-      injectWidget('technicalContainer', 'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js', {"interval":"1D","width":"100%","height":"100%","isTransparent":true,"symbol":symbol,"showIntervalTabs":true,"displayMode":"multiple","colorTheme":"dark","locale":"en"});
+      const uid = 'tv_' + Date.now();
+      const container = document.getElementById('companyWidgets');
+
+      container.innerHTML = ''
+        + '<div class="full-width"><div class="card card-flush"><div class="widget-container" style="height:200px;">'
+        + '<div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>'
+        + '<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js">{"width":"100%","height":"100%","isTransparent":true,"colorTheme":"dark","symbol":"' + symbol + '","locale":"en"}<\/script>'
+        + '</div></div></div></div>'
+
+        + '<div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Advanced Chart</span></div>'
+        + '<div class="widget-container" style="height:550px;"><div class="tradingview-widget-container" style="height:100%;width:100%">'
+        + '<div id="' + uid + '" style="height:calc(100% - 32px);width:100%"></div>'
+        + '</div></div></div></div>'
+
+        + '<div class="grid-2">'
+        + '<div class="card card-flush"><div class="card-header"><span class="card-title">Financials</span></div><div class="widget-container" style="height:450px;">'
+        + '<div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>'
+        + '<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-financials.js">{"isTransparent":true,"displayCurrency":"USD","width":"100%","height":"100%","colorTheme":"dark","symbol":"' + symbol + '","locale":"en"}<\/script>'
+        + '</div></div></div>'
+        + '<div class="card card-flush"><div class="card-header"><span class="card-title">Technical Analysis</span></div><div class="widget-container" style="height:450px;">'
+        + '<div class="tradingview-widget-container" style="height:100%;width:100%"><div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>'
+        + '<script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js">{"interval":"1D","width":"100%","height":"100%","isTransparent":true,"symbol":"' + symbol + '","showIntervalTabs":true,"displayMode":"multiple","colorTheme":"dark","locale":"en"}<\/script>'
+        + '</div></div></div>'
+        + '</div>';
+
+      // innerHTML doesn't execute scripts, so re-create them
+      container.querySelectorAll('script').forEach(function(old) {
+        var s = document.createElement('script');
+        s.type = old.type;
+        if(old.src) s.src = old.src;
+        s.textContent = old.textContent;
+        old.parentNode.replaceChild(s, old);
+      });
+
+      // Load advanced chart via constructor (needs tv.js)
+      var tvjs = document.createElement('script');
+      tvjs.src = 'https://s3.tradingview.com/tv.js';
+      tvjs.onload = function() {
+        new TradingView.widget({"autosize":true,"symbol":symbol,"interval":"D","timezone":"America/New_York","theme":"dark","style":"1","locale":"en","enable_publishing":false,"allow_symbol_change":true,"studies":["RSI@tv-basicstudies","MASimple@tv-basicstudies","MACD@tv-basicstudies"],"container_id":uid,"hide_side_toolbar":false,"withdateranges":true,"details":true,"hotlist":true,"calendar":true,"backgroundColor":"rgba(22,27,34,1)","gridColor":"rgba(255,255,255,0.04)"});
+      };
+      document.head.appendChild(tvjs);
     }
-    // Load default ticker on page ready
     loadCompanyWidgets();
   </script>
 </body>
