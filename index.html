@@ -230,7 +230,7 @@
           var tl = t.toLowerCase();
           document.getElementById('finviz-row').innerHTML = ''
             + '<div class="card"><div class="card-header"><span class="card-title">Finviz Snapshot</span></div><div style="text-align:center;"><img src="https://finviz.com/chart.ashx?t='+t+'&ty=c&ta=1&p=d&s=l" alt="'+t+' Daily Chart" style="width:100%;border-radius:8px;"></div></div>'
-            + '<div class="card"><div class="card-header"><span class="card-title">Institutional Ownership</span><a href="https://fintel.io/so/us/'+tl+'" target="_blank" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-family:var(--font-mono);">Open in Fintel ↗</a></div><iframe src="https://fintel.io/so/us/'+tl+'" style="width:100%;height:500px;border:none;border-radius:8px;background:#0d1117;" sandbox="allow-scripts allow-same-origin"></iframe></div>';
+            + '<div class="card"><div class="card-header"><span class="card-title">Institutional Ownership</span><a href="https://fintel.io/so/us/'+tl+'" target="_blank" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-family:var(--font-mono);">Open in Fintel ↗</a></div><div style="text-align:center;background:#fff;border-radius:8px;padding:0.5rem;"><img src="https://fintel.io/i/us/'+tl+'" alt="'+t+' Institutional Ownership" style="width:100%;border-radius:4px;" onerror="this.parentElement.innerHTML=\'<div style=padding:2rem;color:#666;>Chart unavailable. <a href=https://fintel.io/so/us/'+tl+' target=_blank style=color:#58a6ff>View on Fintel ↗</a></div>\'"></div></div>';
         })();
       </script>
     </div>
