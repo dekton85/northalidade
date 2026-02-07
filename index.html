@@ -429,15 +429,15 @@
         var finEl = document.getElementById('w_fin');
         var techEl = document.getElementById('w_tech');
 
-        createWidgetFrame(profileEl, profileEl.offsetWidth, 200,
+        createWidgetFrame(profileEl, profileEl.offsetWidth, 360,
           'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js',
           {"isTransparent":true,"colorTheme":"dark","symbol":symbol,"locale":"en"});
 
-        createWidgetFrame(finEl, finEl.offsetWidth, 450,
+        createWidgetFrame(finEl, finEl.offsetWidth, 700,
           'https://s3.tradingview.com/external-embedding/embed-widget-financials.js',
           {"isTransparent":true,"displayCurrency":"USD","colorTheme":"dark","symbol":symbol,"locale":"en"});
 
-        createWidgetFrame(techEl, techEl.offsetWidth, 450,
+        createWidgetFrame(techEl, techEl.offsetWidth, 600,
           'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',
           {"interval":"1D","isTransparent":true,"symbol":symbol,"showIntervalTabs":true,"displayMode":"multiple","colorTheme":"dark","locale":"en"});
       }, 50);
