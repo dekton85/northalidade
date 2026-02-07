@@ -394,7 +394,7 @@
       config.width = widthPx;
       config.height = heightPx;
       var iframe = document.createElement('iframe');
-      iframe.style.cssText = 'width:100%;height:' + heightPx + 'px;border:none;display:block;';
+      iframe.style.cssText = 'width:100%;height:' + heightPx + 'px;border:none;display:block;overflow:hidden;';
       iframe.setAttribute('scrolling', 'no');
       parentEl.appendChild(iframe);
       var doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -418,10 +418,8 @@
         + '<div class="full-width"><div class="card card-flush"><div class="widget-container" id="w_profile"></div></div></div>'
         + '<div class="full-width"><div class="card card-flush"><div class="card-header"><span class="card-title">Advanced Chart</span></div>'
         + '<div class="widget-container" style="height:550px;"><div id="' + uid + '" style="height:100%;width:100%"></div></div></div></div>'
-        + '<div class="full-width">'
+        + '<div class="grid-2">'
         + '<div class="card card-flush"><div class="card-header"><span class="card-title">Financials</span></div><div class="widget-container" id="w_fin"></div></div>'
-        + '</div>'
-        + '<div class="full-width">'
         + '<div class="card card-flush"><div class="card-header"><span class="card-title">Technical Analysis</span></div><div class="widget-container" id="w_tech"></div></div>'
         + '</div>';
 
@@ -435,11 +433,11 @@
           'https://s3.tradingview.com/external-embedding/embed-widget-symbol-profile.js',
           {"isTransparent":true,"colorTheme":"dark","symbol":symbol,"locale":"en"});
 
-        createWidgetFrame(finEl, finEl.offsetWidth, 500,
+        createWidgetFrame(finEl, finEl.offsetWidth, 450,
           'https://s3.tradingview.com/external-embedding/embed-widget-financials.js',
           {"isTransparent":true,"displayCurrency":"USD","colorTheme":"dark","symbol":symbol,"locale":"en"});
 
-        createWidgetFrame(techEl, techEl.offsetWidth, 550,
+        createWidgetFrame(techEl, techEl.offsetWidth, 450,
           'https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js',
           {"interval":"1D","isTransparent":true,"symbol":symbol,"showIntervalTabs":true,"displayMode":"multiple","colorTheme":"dark","locale":"en"});
       }, 50);
